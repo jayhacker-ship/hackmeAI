@@ -1,6 +1,6 @@
-import fetch from 'node-fetch';
+const fetch = require('node-fetch');
 
-export const handler = async (event) => {
+exports.handler = async (event) => {
   // 1. Check if the request method is POST
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method Not Allowed' };

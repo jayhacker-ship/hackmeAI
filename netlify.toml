@@ -1,7 +1,7 @@
 [build]
   # This command is run when you deploy the site.
-  # We are installing the 'node-fetch' dependency for our function.
-  command = "npm install node-fetch"
+  # It installs all dependencies listed in package.json.
+  command = "npm install"
   # This is the directory where our serverless functions are located.
   functions = "netlify/functions"
 
