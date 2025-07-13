@@ -1,0 +1,14 @@
+[build]
+  # This command is run when you deploy the site.
+  # We are installing the 'node-fetch' dependency for our function.
+  command = "npm install node-fetch"
+  # This is the directory where our serverless functions are located.
+  functions = "netlify/functions"
+
+# This is a redirect rule that makes our API cleaner to call,
+# but we are calling the direct URL in js/main.js for simplicity.
+# You could use this in the future if you want.
+# [[redirects]]
+#   from = "/api/*"
+#   to = "/.netlify/functions/:splat"
+#   status = 200 

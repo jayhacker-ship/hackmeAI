@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JAROUT.X God-Level Terminal</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap');
+
+        * {
+            box-sizing: border-box;
+        }
+
+        :root {
+            --black: #000000;
+            --dark-grey: #1a1a1a;
+            --green: #00ff7f;
+            --bright-green: #39ff14;
+            --cyan: #00ffff;
+            --red: #ff3b3b;
+            --yellow: #ffff00;
+            --purple: #9d00ff;
+            --orange: #ff7f00;
+            --glow-green: 0 0 2px rgba(0, 255, 127, 0.7), 0 0 4px rgba(0, 255, 127, 0.5);
+            --glow-cyan: 0 0 2px rgba(0, 255, 255, 0.7), 0 0 4px rgba(0, 255, 255, 0.5);
+            --glow-purple: 0 0 3px rgba(157, 0, 255, 0.7), 0 0 6px rgba(157, 0, 255, 0.5);
+            --animated-gradient: linear-gradient(270deg, #00ff7f, #9d00ff, #00ffff, #ff7f00, #00ff7f);
+        }
+        body.theme-classic {
+            --black: #0f0f0f;
+            --green: #00ff00;
+            --bright-green: #39ff14;
+            --cyan: #00ffff;
+            --purple: #00ff00;
+            --orange: #00ff00;
+            --glow-green: 0 0 2px #00ff00, 0 0 4px #00ff00;
+            --animated-gradient: linear-gradient(270deg, #00ff00, #39ff14, #00ff00);
+        }
+        .copy-btn {
+            display: inline-block;
+            margin-left: 8px;
+            padding: 2px 8px;
+            font-size: 0.9em;
+            background: var(--purple);
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+        .copy-btn:hover { opacity: 1; }
+
+        /* Animated Neon Background Shape */
+        #neon-bg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 70vw;
+            height: 70vh;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
+            filter: blur(60px) brightness(0.7);
+            opacity: 0.5;
+            background: radial-gradient(circle at 30% 30%, #00ff7f 0%, #9d00ff 60%, transparent 100%);
+            animation: neonMove 12s ease-in-out infinite alternate;
+        }
+        @keyframes neonMove {
+            0% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) scale(1.1) rotate(20deg); }
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--black);
+            color: var(--green);
+            font-family: 'Roboto Mono', monospace;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        body::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(0deg, rgba(0,0,0,0.5), rgba(0,0,0,0.5) 1px, transparent 1px, transparent 3px);
+            z-index: 1000;
+            pointer-events: none;
+            opacity: 0.2;
+        }
+
+        #matrix-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.2;
+        }
+
+        .terminal-container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: 
+                radial-gradient(circle, rgba(0, 50, 20, 0.3) 0%, rgba(0,0,0,0) 70%),
+                linear-gradient(to top, rgba(0, 20, 10, 0.4), transparent 50%);
+            backdrop-filter: blur(1.5px);
+            border: 4px solid transparent;
+            border-radius: 18px;
+            box-shadow: 0 0 40px 10px #00ff7f44, 0 0 0 8px #9d00ff22 inset;
+            animation: borderGlow 3s linear infinite;
+            background-clip: padding-box, border-box;
+        }
+        @keyframes borderGlow {
+            0% { border-image: var(--animated-gradient) 1; }
+            100% { border-image: var(--animated-gradient) 1; }
+        }
+
+        .terminal-body {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--green) var(--black);
+            text-shadow: 0 0 4px var(--green);
+        }
+
+        .terminal-body::-webkit-scrollbar { width: 8px; }
+        .terminal-body::-webkit-scrollbar-track { background: var(--black); }
+        .terminal-body::-webkit-scrollbar-thumb { background-color: var(--green); border-radius: 4px; box-shadow: var(--glow-green); }
+
+        /* Smoother typed output animation */
+        .terminal-line {
+            margin-bottom: 5px;
+            white-space: pre-wrap;
+            word-break: break-word;
+            opacity: 0;
+            transform: translateY(15px);
+            animation: fadeIn 0.7s cubic-bezier(0.4, 0.2, 0.2, 1) forwards;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .input-line { display: flex; align-items: center; opacity: 1; transform: none; }
+        .prompt { color: var(--cyan); margin-right: 8px; text-shadow: var(--glow-cyan); }
+        .prompt .user { color: var(--bright-green); }
+        .prompt .host { color: var(--purple); }
+        .cursor { 
+            width: 9px; 
+            height: 17px; 
+            background: linear-gradient(90deg, #00ff7f, #9d00ff, #00ffff, #ff7f00, #00ff7f);
+            background-size: 400% 400%;
+            animation: blink 1s infinite, cursorColor 3s linear infinite;
+            box-shadow: 0 0 8px var(--bright-green), 0 0 15px white;
+            border-radius: 1px;
+        }
+        @keyframes blink { 0%, 100% { opacity: 1; background-color: white; } 50% { opacity: 0; } }
+        @keyframes cursorColor {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .text-success { color: var(--green); }
+        .text-info { color: var(--cyan); }
+        .text-warning { color: var(--yellow); }
+        .text-danger { color: var(--red); }
+        .text-purple { color: var(--purple); text-shadow: var(--glow-purple); }
+        .text-orange { color: var(--orange); }
+
+        .intro-line, .welcome-banner { font-family: 'Courier New', monospace; white-space: pre; line-height: 1.2; text-shadow: 0 0 5px var(--green);}
+        .help-category, .toolkit-item {
+            border: 1px solid var(--purple);
+            padding: 15px; margin: 10px 0;
+            cursor: pointer; transition: all 0.3s ease;
+            animation: pulse-glow 3s infinite alternate;
+            text-shadow: var(--glow-purple);
+        }
+        .help-category:hover, .toolkit-item:hover { 
+            background: rgba(157, 0, 255, 0.2); 
+            box-shadow: 0 0 25px var(--purple), inset 0 0 10px rgba(157, 0, 255, 0.5);
+            transform: scale(1.02);
+        }
+        @keyframes pulse-glow { from { box-shadow: 0 0 5px var(--purple); } to { box-shadow: 0 0 20px var(--purple); } }
+
+        .command-help { display: grid; grid-template-columns: 150px 1fr; gap: 10px; margin-bottom: 8px; }
+        .command-name { color: var(--bright-green); font-weight: bold; }
+        
+        .output-section-title { 
+            color: var(--orange); 
+            border-bottom: 1px solid var(--orange); 
+            margin-top: 10px; 
+            margin-bottom: 5px; 
+            display: inline-block;
+            text-shadow: 0 0 5px var(--orange);
+        }
+
+        /* Progress Bar */
+        .progress-bar-container { border: 1px solid var(--green); padding: 2px; width: 50%; margin-top:5px; }
+        .progress-bar { background-color: var(--green); height: 15px; width: 0%; transition: width 0.2s linear; }
+
+        /* Syntax Highlighting for Code Snippets */
+        .code-block {
+            background: rgba(10, 25, 15, 0.4);
+            border-left: 3px solid var(--purple);
+            padding: 15px;
+            margin: 10px 0;
+            font-family: 'Roboto Mono', monospace;
+            white-space: pre-wrap;
+            border-radius: 4px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+        }
+        .code-block .code-keyword { color: var(--purple); }
+        .code-block .code-string { color: var(--orange); }
+        .code-block .code-comment { color: #888; font-style: italic; }
+        .code-block .code-number { color: var(--cyan); }
+        .code-block .code-function { color: var(--bright-green); }
+        .code-block .code-class { color: var(--yellow); }
+
+        .command-example {
+            background: rgba(10, 25, 15, 0.6);
+            border: 1px solid var(--purple);
+            border-left: 3px solid var(--bright-green);
+            padding: 10px;
+            margin: 10px 0;
+            font-family: 'Roboto Mono', monospace;
+            white-space: pre-wrap;
+            border-radius: 4px;
+            color: var(--bright-green);
+            text-shadow: var(--glow-green);
+        }
+
+        .terminal-window {
+            position: absolute;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 820px;
+            max-width: 98vw;
+            height: 540px;
+            max-height: 90vh;
+            background: var(--black);
+            border-radius: 14px;
+            box-shadow: 0 0 40px #00ff7f55, 0 0 0 4px #9d00ff22;
+            border: 3px solid transparent;
+            overflow: hidden;
+            z-index: 1001;
+            display: flex;
+            flex-direction: column;
+            animation: windowGlitch 2.5s infinite alternate;
+        }
+        @keyframes windowGlitch {
+            0%,100%{filter:none;}
+            10%{filter:drop-shadow(0 0 8px #00ff7f) hue-rotate(0deg);}
+            20%{filter:drop-shadow(0 0 12px #9d00ff) hue-rotate(20deg);}
+            30%{filter:drop-shadow(0 0 8px #00ffff) hue-rotate(-10deg);}
+            40%{filter:drop-shadow(0 0 16px #ff7f00) hue-rotate(10deg);}
+            50%{filter:drop-shadow(0 0 8px #00ff7f) hue-rotate(0deg);}
+        }
+        .terminal-titlebar {
+            height: 36px;
+            background: linear-gradient(90deg,#181828 80%,#00ff7f22);
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            user-select: none;
+            cursor: move;
+        }
+        .titlebar-btn {
+            width: 14px;height: 14px;border-radius:50%;margin-right:7px;display:inline-block;
+        }
+        .titlebar-btn.close {background:#ff3b3b;}
+        .titlebar-btn.min {background:#ffff00;}
+        .titlebar-btn.max {background:#00ff7f;}
+        .titlebar-title {color:#00ff7f;font-family:'Fira Mono',monospace;font-size:1.1em;margin-left:10px;letter-spacing:1px;}
+        @media (max-width:900px){.terminal-window{width:99vw;height:80vh;}}
+        @media (max-width:600px){.terminal-window{top:10px;height:95vh;}}
+        .glitch-line {
+            color:#ff3b3b;
+            font-family:'Fira Mono',monospace;
+            font-size:1em;
+            text-shadow:0 0 8px #ff3b3b,0 0 2px #fff;
+            animation:glitchFlicker 0.2s steps(2) infinite alternate;
+        }
+        @keyframes glitchFlicker{0%{opacity:0.7;}100%{opacity:1;}}
+    </style>
+</head>
+<body>
+    <div id="neon-bg"></div>
+    <canvas id="matrix-bg"></canvas>
+    <div class="terminal-container terminal-window" id="terminalWindow">
+        <div class="terminal-titlebar" id="titlebar">
+            <span class="titlebar-btn close"></span><span class="titlebar-btn min"></span><span class="titlebar-btn max"></span>
+            <span class="titlebar-title">JAROUT.X Terminal</span>
+        </div>
+        <div class="terminal-body" id="terminalBody"></div>
+    </div>
+
+    <div id="intro-overlay" style="position:fixed;z-index:2000;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.98);display:flex;align-items:center;justify-content:center;flex-direction:column;"><pre id="intro-ascii" style="font-family:'Fira Mono', 'Roboto Mono', monospace;font-size:1.1em;color:#00ff7f;text-align:center;margin:0;line-height:1.1;"></pre><div id="intro-cursor" style="width:12px;height:22px;background:#00ff7f;display:inline-block;margin-left:6px;vertical-align:middle;animation:blinkIntro 1s steps(1) infinite;"></div></div>
+    <style>@keyframes blinkIntro {0%,100%{opacity:1;}50%{opacity:0;}}</style>
+
+    <script>
+        const terminalBody = document.getElementById('terminalBody');
+        let terminalState = 'NORMAL'; // NORMAL, HELP_SELECTION, TOOLKIT
+        let activeToolkit = null;
+        let currentInput = '';
+        let commandHistory = [];
+        let historyIndex = -1;
+        let userPrompt = 'visitor@unknown:~$';
+        function updatePrompt() {
+            prompt = `<span class="prompt">${userPrompt}</span>`;
+        }
+        updatePrompt();
+        
+        const commands = {
+            // META
+            'about': { category: 'System', description: 'Displays my introduction.', execute: (cb) => showIntroAnimation(cb) },
+            'help': {
+                category: 'System', description: 'Shows command categories.',
+                execute: (cb) => {
+                    terminalState = 'HELP_SELECTION';
+                    const categories = [...new Set(Object.values(commands).map(c => c.category))];
+                    let helpOutput = [`<span class="text-cyan">Select a command category:</span>`];
+                    categories.forEach((cat, i) => {
+                        helpOutput.push(`<div class="help-category" onclick="selectHelpCategory('${cat}')">[${i+1}] ${cat}</div>`);
+                    });
+                    helpOutput.push(`Type a number or 'exit' to return.`);
+                    typeLines(helpOutput, cb, 0, true);
+                }
+            },
+            'toolkit': {
+                category: 'System', description: 'Launch interactive learning toolkit.',
+                execute: (cb) => {
+                    terminalState = 'TOOLKIT';
+                    typeLines([
+                        `<span class="text-orange">--- JAROUT.X Interactive Toolkit ---</span>`,
+                        `<span class="text-cyan">Select a tool to simulate for practice:</span>`,
+                        `<div class="toolkit-item" onclick="selectToolkit(1)">[1] nmap-scan</div>`,
+                        `<div class="toolkit-item" onclick="selectToolkit(2)">[2] hydra-attack</div>`,
+                        `<div class="toolkit-item" onclick="selectToolkit(3)">[3] john-crack</div>`,
+                        `<div class="toolkit-item" onclick="selectToolkit(4)">[4] nikto-scan</div>`,
+                        `<div class="toolkit-item" onclick="selectToolkit(5)">[5] sqlmap-scan</div>`,
+                        `<div class="toolkit-item" onclick="selectToolkit(6)">[6] burpsuite-proxy</div>`,
+                        `Type a number or 'exit' to return.`
+                    ], cb, 0, true);
+                }
+            },
+            'clear': { category: 'System', description: 'Clears the terminal.', execute: () => { terminalBody.innerHTML = ''; appendInputLine(); } },
+            'contact': {
+                category: 'System', description: 'Display contact information.',
+                execute: (cb) => {
+                    cb([
+                        `<span class="output-section-title">Connect & Collaborate</span>`,
+                        `The digital frontier is vast, and the code is waiting. For collaborations, queries, or a challenge, you can reach out.`,
+                        ``,
+                        ` <span class="text-purple">></span> <span class="text-info">Discord:</span> <span class="text-warning">https://discord.gg/jarout</span>`,
+                        ` <span class="text-purple">></span> <span class="text-info">GitHub:</span>  <span class="text-warning">https://github.com/jayhacker-ship</span>`,
+                        ` <span class="text-purple">></span> <span class="text-info">Instagram:</span>  <span class="text-warning">https://instagram.com/jayhacker_0073</span>`,
+                        ` <span class="text-purple">></span> <span class="text-info">Email:</span>  <span class="text-warning">jayhackerrout@gmail.com</span>`,
+                        ` <span class="text-purple">></span> <span class="text-info">Telegram:</span>  <span class="text-warning">https://t.me/noxlooters_0073</span>`,
+                        ` <span class="text-purple">></span> <span class="text-info">WhatsApp:</span>  <span class="text-warning">+91 7972243573</span>`,
+                    ]);
+                }
+            },
+            'exit': {
+                category: 'System', description: 'Exits current menu.',
+                execute: (cb) => {
+                    if (terminalState !== 'NORMAL') {
+                        terminalState = 'NORMAL';
+                        activeToolkit = null;
+                        typeLines([`Returning to normal shell.`,''], cb, 0, true);
+                    }
+                }
+            },
+            'theme': {
+                category: 'System', description: 'Switch terminal theme (cyberpunk/classic).',
+                execute: (cb, args) => {
+                    const theme = (args[0]||'').toLowerCase();
+                    if(theme === 'classic') {
+                        document.body.classList.add('theme-classic');
+                        typeLines(['<span class="text-success">Classic green theme enabled!</span>']);
+                    } else {
+                        document.body.classList.remove('theme-classic');
+                        typeLines(['<span class="text-success">Cyberpunk theme enabled!</span>']);
+                    }
+                }
+            },
+            'ls': { category: 'System', description: 'Alias for help.', execute: (cb) => commands['help'].execute(cb) },
+            'cls': { category: 'System', description: 'Alias for clear.', execute: (cb) => commands['clear'].execute(cb) },
+            '?': { category: 'System', description: 'Alias for help.', execute: (cb) => commands['help'].execute(cb) },
+            'setprompt': {
+                category: 'System', description: 'Set your custom prompt (e.g., setprompt hacker@matrix:~$)',
+                execute: (cb, args) => {
+                    userPrompt = args.join(' ') || 'visitor@unknown:~$';
+                    updatePrompt();
+                    typeLines([`<span class="text-success">Prompt updated!</span>`]);
+                }
+            },
+            'fortune': {
+                category: 'Fun', description: 'Get a random hacker quote.',
+                execute: (cb) => {
+                    const quotes = [
+                        'The quieter you become, the more you are able to hear. – Kali Linux',
+                        'Hack the planet! – Hackers (1995)',
+                        'There is no patch for human stupidity. – Kevin Mitnick',
+                        'With great power comes great responsibility. – Spider-Man',
+                        'The best way to predict the future is to invent it. – Alan Kay',
+                        'Talk is cheap. Show me the code. – Linus Torvalds',
+                        'Stay hungry, stay foolish. – Steve Jobs',
+                        'To err is human, but to really foul things up you need a computer. – Paul Ehrlich',
+                        'First, solve the problem. Then, write the code. – John Johnson',
+                        'Security is not a product, but a process. – Bruce Schneier'
+                    ];
+                    const q = quotes[Math.floor(Math.random()*quotes.length)];
+                    typeLines([`<span class="text-orange">${q}</span>`]);
+                }
+            },
+            'matrix': {
+                category: 'Fun', description: 'Full-screen code rain effect.',
+                execute: (cb) => {
+                    document.getElementById('matrix-bg').style.opacity = 1;
+                    document.body.style.overflow = 'hidden';
+                    setTimeout(() => {
+                        document.getElementById('matrix-bg').style.opacity = 0.2;
+                        document.body.style.overflow = '';
+                        typeLines(['<span class="text-success">Matrix mode ended.</span>']);
+                    }, 5000);
+                    typeLines(['<span class="text-warning">Welcome to the Matrix...</span>']);
+                }
+            },
+
+            // HACKING
+            'nmap': { category: 'Hacking', description: 'Network exploration and security auditing.', 
+                execute: (cb) => cb([
+                    `<span class="output-section-title">Nmap (Network Mapper)</span>`,
+                    `Nmap is an essential tool for network discovery and security auditing. Hackers and system administrators use it to identify what devices are running on a network, discover open ports, and detect security risks.`,
+                    ` `,
+                    `<span class="text-yellow">When to use it:</span> During the reconnaissance phase of a penetration test to map out the target network and find potential entry points.`,
+                    `<span class="text-yellow">What it's for:</span> Identifying live hosts, scanning for open ports, and fingerprinting services and operating systems.`,
+                    `<span class="text-yellow">Example Command:</span>`,
+                    `<div class="command-example">nmap -sV -A &lt;target_ip&gt;</div>`
+                ]) 
+            },
+            'hydra': { category: 'Hacking', description: 'Fast network logon cracker.',
+                execute: (cb) => cb([
+                    `<span class="output-section-title">Hydra</span>`,
+                    `Hydra is a powerful and fast tool for brute-force attacks against authentication services. It supports numerous protocols like SSH, FTP, Telnet, and HTTP.`,
+                    ` `,
+                    `<span class="text-yellow">When to use it:</span> When you have identified a login form or service and want to test it for weak passwords using a wordlist.`,
+                    `<span class="text-yellow">What it's for:</span> Cracking passwords on network services by rapidly trying thousands of combinations.`,
+                    `<span class="text-yellow">Example Command:</span>`,
+                    `<div class="command-example">hydra -L users.txt -P passwords.txt &lt;target_ip&gt; ssh</div>`
+                ]) 
+            },
+            'sqlmap': { category: 'Hacking', description: 'SQL injection and database takeover tool.',
+                execute: (cb) => cb([
+                    `<span class="output-section-title">SQLmap</span>`,
+                    `SQLmap is an open-source penetration testing tool that automates the process of detecting and exploiting SQL injection flaws and taking over database servers.`,
+                    ` `,
+                    `<span class="text-yellow">When to use it:</span> After discovering a web application that might be vulnerable to SQL injection (e.g., through a URL parameter).`,
+                    `<span class="text-yellow">What it's for:</span> Automating SQL injection, enumerating databases, and even dumping entire database tables or executing commands on the server.`,
+                    `<span class="text-yellow">Example Command (List Databases):</span>`,
+                    `<div class="command-example">sqlmap -u "http://testphp.vulnweb.com/listproducts.php?cat=1" --dbs</div>`
+                ])  
+            },
+            'john': { category: 'Hacking', description: 'John the Ripper password cracker.',
+                execute: (cb) => cb([
+                    `<span class="output-section-title">John the Ripper</span>`,
+                    `John the Ripper (often called 'John') is a famous password cracking tool. Unlike Hydra, which attacks live services, John works on offline password hashes.`,
+                    ` `,
+                    `<span class="text-yellow">When to use it:</span> When you have obtained a file containing password hashes (e.g., from a database dump or a Linux /etc/shadow file).`,
+                    `<span class="text-yellow">What it's for:</span> Cracking password hashes using dictionary attacks, brute-force, and other methods to reveal the original passwords.`,
+                    `<span class="text-yellow">Example Command:</span>`,
+                    `<div class="command-example">john --wordlist=passwords.txt hashes.txt</div>`
+                ]) 
+            },
+            'metasploit': { category: 'Hacking', description: 'Exploitation & payload creation.',
+                execute: (cb) => cb([
+                    `<span class="output-section-title">Metasploit Framework</span>`,
+                    `The Metasploit Framework is a powerful open-source platform for developing, testing, and executing exploit code. It's a cornerstone of penetration testing.`,
+                    ` `,
+                    `<span class="text-yellow">When to use it:</span> After finding a vulnerability, use Metasploit to find a matching exploit, configure a payload (e.g., a reverse shell), and gain access to the target system.`,
+                    `<span class="text-yellow">What it's for:</span> Exploiting system vulnerabilities, creating custom payloads, and post-exploitation activities.`,
+                    `<span class="text-yellow">Example Workflow:</span>`,
+                    `<div class="command-example"># 1. Launch console
+msfconsole
+
+# 2. Search for an exploit
+search vsftpd 2.3.4
+
+# 3. Use the exploit and set options
+use exploit/unix/ftp/vsftpd_234_backdoor
+set RHOSTS &lt;target_ip&gt;
+
+# 4. Run it
+exploit</div>`
+                ])
+            },
+            'wireshark': { category: 'Hacking', description: 'Packet sniffing & network traffic analysis.',
+                execute: (cb) => cb([
+                    `<span class="output-section-title">Wireshark</span>`,
+                    `Wireshark is the world's foremost network protocol analyzer. It lets you see what's happening on your network at a microscopic level.`,
+                    ` `,
+                    `<span class="text-yellow">When to use it:</span> For troubleshooting network problems, analyzing malware traffic, or learning how protocols work. You can inspect individual packets and their contents.`,
+                    `<span class="text-yellow">What it's for:</span> Capturing and analyzing network traffic in real-time, deep inspection of hundreds of protocols, and offline analysis.`,
+                    `<span class="text-yellow">Usage Note:</span>`,
+                    `Wireshark is a GUI-based tool. You typically start it from your terminal or application menu and then select a network interface to start capturing packets.`,
+                    `<div class="command-example">wireshark</div>`
+                ])
+            },
+            'nikto': { category: 'Hacking', description: 'Web server vulnerability scanner.',
+                execute: (cb) => cb([
+                    `<span class="output-section-title">Nikto</span>`,
+                    `Nikto is an Open Source web server scanner which performs comprehensive tests against web servers for multiple items, including over 6700 potentially dangerous files/programs.`,
+                    ` `,
+                    `<span class="text-yellow">When to use it:</span> During the web reconnaissance phase to quickly find low-hanging fruit like outdated server software, dangerous files, and misconfigurations.`,
+                    `<span class="text-yellow">What it's for:</span> Automated scanning for known web server vulnerabilities.`,
+                    `<span class="text-yellow">Example Command:</span>`,
+                    `<div class="command-example">nikto -h http://&lt;target_domain&gt;</div>`
+                ])
+            },
+            'burpsuite': { category: 'Hacking', description: 'Web application security testing.',
+                execute: (cb) => cb([
+                    `<span class="output-section-title">Burp Suite</span>`,
+                    `Burp Suite is an integrated platform for performing security testing of web applications. It acts as a proxy, allowing you to intercept, inspect, and modify traffic between your browser and the target application.`,
+                    ` `,
+                    `<span class="text-yellow">When to use it:</span> For hands-on testing of web applications to find complex vulnerabilities like SQL injection, Cross-Site Scripting (XSS), and business logic flaws.`,
+                    `<span class="text-yellow">What it's for:</span> Intercepting and manipulating HTTP/S traffic, automated vulnerability scanning, and detailed analysis of web application security.`,
+                    `<span class="text-yellow">Usage Note:</span>`,
+                    `Burp Suite is primarily a GUI-based tool. You run the application and configure your browser to proxy traffic through it (usually at 127.0.0.1:8080). This allows you to intercept, inspect, and modify web traffic.`
+                ])
+            },
+            'aircrack-ng': { category: 'Hacking', description: 'Wi-Fi network (WEP/WPA) cracking.',
+                execute: (cb) => cb([
+                    `<span class="output-section-title">Aircrack-ng</span>`,
+                    `Aircrack-ng is a complete suite of tools to assess Wi-Fi network security. It focuses on monitoring, attacking, testing, and cracking Wi-Fi security protocols.`,
+                    ` `,
+                    `<span class="text-yellow">When to use it:</span> When auditing the security of a Wi-Fi network. It can capture network packets and, if enough data is gathered, crack WEP and WPA/WPA2-PSK keys.`,
+                    `<span class="text-yellow">What it's for:</span> Wi-Fi network monitoring, packet capture, and cracking weak passwords.`,
+                    `<span class="text-yellow">Example Command (Crack WPA):</span>`,
+                    `<div class="command-example">aircrack-ng -w wordlist.txt -b &lt;BSSID&gt; capture-file.cap</div>`
+                ])
+            },
+            'dirb': { category: 'Hacking', description: 'Web directory brute-forcing.',
+                execute: (cb) => cb([
+                    `<span class="output-section-title">Dirb / Gobuster</span>`,
+                    `Dirb and Gobuster are tools used to discover content and directories on web servers by launching a dictionary-based attack. They brute-force filenames and directory names to find hidden resources.`,
+                    ` `,
+                    `<span class="text-yellow">When to use it:</span> During web reconnaissance to find unlisted files, directories, and endpoints that may reveal sensitive information or provide access to administrative pages.`,
+                    `<span class="text-yellow">What it's for:</span> Brute-forcing web server URIs to discover hidden content.`,
+                    `<span class="text-yellow">Example Command:</span>`,
+                    `<div class="command-example">dirb http://&lt;target_url&gt;</div>`
+                ]) 
+            },
+            'cyber-threats': { category: 'Hacking', description: 'Learn about common cyber threats.',
+                execute: (cb) => cb([
+                    `<span class="output-section-title">Common Cyber Threats Explained</span>`,
+                    `Understanding the threat landscape is the first step to defense. Here are some of the most common types of cyber attacks:`,
+                    ``,
+                    `<span class="text-yellow">🔹 Malware (Malicious Software)</span>`,
+                    `Any software intentionally designed to cause damage.`,
+                    ` - <span class="text-danger">Ransomware:</span> Locks your data and demands a ransom. <span class="text-info">How it works:</span> It uses strong encryption to make your files unreadable. A message then demands payment (usually cryptocurrency) for the decryption key.`,
+                    ` - <span class="text-danger">Spyware:</span> Secretly monitors your activity. <span class="text-info">Example:</span> A keylogger is spyware that records every keystroke, capturing passwords and financial info.`,
+                    ` - <span class="text-danger">Worms:</span> Self-replicating and spread across networks automatically, consuming bandwidth and causing chaos.`,
+                    ` - <span class="text-danger">Trojans:</span> Disguise as legitimate software. You run it, and it secretly installs a malicious backdoor.`,
+                    ``,
+                    `<span class="text-yellow">🔹 Phishing</span>`,
+                    `A social engineering attack to trick you into revealing sensitive info.`,
+                    ` - <span class="text-orange">How it works:</span> You get an email that looks legitimate (e.g., from your bank) asking you to "verify" your account. The link goes to a fake website that steals your credentials.`,
+                    ` - <span class="text-orange">Red Flags:</span> Urgent/threatening language, generic greetings, spelling errors, and URLs that don't match the sender. Always hover over links before clicking!`,
+                    ``,
+                    `<span class="text-yellow">🔹 Man-in-the-Middle (MitM) Attack</span>`,
+                    `An attacker secretly intercepts communication between two parties.`,
+                    ` - <span class="text-purple">How it works:</span> An attacker sets up a malicious Wi-Fi hotspot (e.g., "Free_Airport_Wi-Fi"). When you connect, all your traffic goes through their computer.`,
+                    ` - <span class="text-purple">How to Defend:</span> Avoid public Wi-Fi for sensitive tasks, look for HTTPS in the URL, and use a VPN to encrypt your connection.`,
+                    ``,
+                    `<span class="text-yellow">🔹 Denial-of-Service (DoS/DDoS) Attack</span>`,
+                    `The goal is to make a website or service unavailable to its users.`,
+                    ` - <span class="text-cyan">DoS:</span> One computer floods a server with traffic.`,
+                    ` - <span class="text-cyan">DDoS (Distributed DoS):</span> A "botnet" (many compromised computers) floods the server, making it much more powerful and harder to stop.`,
+                    ` - <span class="text-cyan">Analogy:</span> Imagine one person blocking a shop entrance (DoS) versus a giant, coordinated mob blocking it (DDoS).`,
+                ]) 
+            },
+
+            // PROGRAMMING
+            'html': { category: 'Programming', description: 'The skeleton of all webpages.',
+                execute: (cb) => cb([
+                    `<span class="output-section-title">HTML: HyperText Markup Language</span>`,
+                    `HTML is the standard language for creating web pages. It provides the fundamental structure and content of a site.`,
+                    ` `,
+                    `<span class="text-yellow">Analogy:</span> If a website is a house, HTML is the blueprint, the foundation, and the wooden frame. It defines the rooms (pages), doorways (links), windows, and walls (content blocks).`,
+                    ` `,
+                    `<span class="text-yellow">How it works:</span> It uses "tags" to structure content. For example, <span class="text-info">&lt;h1&gt;</span> for a main heading, <span class="text-info">&lt;p&gt;</span> for a paragraph, and <span class="text-info">&lt;img&gt;</span> for an image. The browser reads these tags to render the page.`,
+                    `<span class="text-yellow">What it's for:</span> Defining the structure of every website you visit. It's the first and most essential layer of web development.`
+                ])
+            },
+            'css': { category: 'Programming', description: 'The style and design of webpages.',
+                execute: (cb) => cb([
+                    `<span class="output-section-title">CSS: Cascading Style Sheets</span>`,
+                    `CSS is the language used to style the visual presentation of a webpage written in HTML. It controls colors, fonts, layout, and responsiveness.`,
+                    ` `,
+                    `<span class="text-yellow">Analogy:</span> If HTML is the house's frame, CSS is the paint, wallpaper, furniture, and landscaping. It makes the house look good and feel like a home.`,
+                    ` `,
+                    `<span class="text-yellow">How it works:</span> CSS uses "selectors" to target HTML elements and applies "properties" to them. For example, you can select all <span class="text-info">&lt;p&gt;</span> tags and make their text blue and larger.`,
+                    `<span class="text-yellow">What it's for:</span> Designing beautiful and responsive websites. Without CSS, the web would be a plain, black-and-white wall of text.`
+                ])
+            },
+            'javascript': { category: 'Programming', description: 'The brains and interactivity of webpages.',
+                execute: (cb) => cb([
+                    `<span class="output-section-title">JavaScript (JS)</span>`,
+                    `JavaScript is a programming language that enables interactive web pages. It's the third core technology of the web, alongside HTML and CSS.`,
+                    ` `,
+                    `<span class="text-yellow">Analogy:</span> If HTML is the frame and CSS is the design, JavaScript is the electricity, plumbing, and appliances. It makes the house functional—turning on lights, opening garage doors, and running the dishwasher.`,
+                    ` `,
+                    `<span class="text-yellow">How it works:</span> JS runs directly in the browser and can manipulate the HTML and CSS of a page in real-time. It handles events like clicks and keyboard presses, makes network requests to fetch data, and creates animations.`,
+                    `<span class="text-yellow">What it's for:</span> Creating dynamic and interactive user experiences, from simple form validations to complex single-page applications like Google Maps or Facebook.`
+                ])
+            },
+            'python': { category: 'Programming', description: 'A versatile, high-level programming language.', 
+                execute: (cb) => cb([
+                    `<span class="output-section-title">Python</span>`,
+                    `Python is a high-level, general-purpose programming language known for its simple, English-like syntax and code readability.`,
+                    ` `,
+                    `<span class="text-yellow">Philosophy:</span> Often described as having "batteries included," it comes with a vast standard library. Its design emphasizes simplicity and developer productivity.`,
+                    ` `,
+                    `<span class="text-yellow">What it's for:</span>`,
+                    ` - <span class="text-info">Web Development:</span> With frameworks like Django and Flask.`,
+                    ` - <span class="text-info">AI & Machine Learning:</span> The dominant language for data science with libraries like TensorFlow, PyTorch, and Pandas.`,
+                    ` - <span class="text-info">Automation & Scripting:</span> Writing scripts to automate repetitive tasks is a common and powerful use case.`
+                ]) 
+            },
+            'cpp': { category: 'Programming', description: 'High-performance language for systems programming.',
+                execute: (cb) => cb([
+                    `<span class="output-section-title">C++</span>`,
+                    `C++ is a powerful, high-performance programming language that gives developers a high degree of control over system resources and memory.`,
+                    ` `,
+                    `<span class="text-yellow">Why it's so fast:</span> It's a compiled language, meaning the code is translated directly into machine-readable instructions for the processor. This, combined with manual memory management, allows for maximum optimization.`,
+                    ` `,
+                    `<span class="text-yellow">What it's for:</span>`,
+                    ` - <span class="text-info">Game Development:</span> The core of major game engines like Unreal Engine.`,
+                    ` - <span class="text-info">Operating Systems:</span> Parts of Windows, macOS, and Linux are written in C++.`,
+                    ` - <span class="text-info">High-Frequency Trading:</span> Where every nanosecond of performance counts.`
+                ])
+            },
+            'csharp': { category: 'Programming', description: 'A modern, object-oriented language by Microsoft.',
+                execute: (cb) => cb([
+                    `<span class="output-section-title">C# (C-Sharp)</span>`,
+                    `C# is a modern, object-oriented, and type-safe programming language developed by Microsoft to run on its .NET Framework.`,
+                    ` `,
+                    `<span class="text-yellow">Key Features:</span> It blends the power of C++ with the simplicity of languages like Visual Basic. It's known for its strong typing, which helps prevent errors, and its rich standard library.`,
+                    ` `,
+                    `<span class="text-yellow">What it's for:</span>`,
+                    ` - <span class="text-info">Game Development:</span> The primary language for the Unity game engine, one of the most popular in the world.`,
+                    ` - <span class="text-info">Windows Applications:</span> Building desktop applications for the Windows ecosystem.`,
+                    ` - <span class="text-info">Web Development:</span> Creating robust web applications with the ASP.NET framework.`
+                ])
+            },
+            'java': { category: 'Programming', description: 'A versatile, object-oriented language.',
+                execute: (cb) => cb([
+                    `<span class="output-section-title">Java</span>`,
+                    `Java is a high-level, class-based, object-oriented programming language designed to have as few implementation dependencies as possible.`,
+                    ` `,
+                    `<span class="text-yellow">Core Philosophy:</span> "Write Once, Run Anywhere" (WORA). Java code is compiled into "bytecode," which can be run on any device that has a Java Virtual Machine (JVM). This makes it incredibly portable.`,
+                    ` `,
+                    `<span class="text-yellow">What it's for:</span>`,
+                    ` - <span class="text-info">Enterprise Applications:</span> Used by large corporations for building robust, scalable backend systems.`,
+                    ` - <span class="text-info">Android Development:</span> The original, foundational language for building native Android apps.`,
+                    ` - <span class="text-info">Big Data:</span> Many big data frameworks, like Hadoop, are built on Java.`
+                ])
+            },
+            'kotlin': { category: 'Programming', description: 'The modern, preferred language for Android.',
+                execute: (cb) => cb([
+                    `<span class="output-section-title">Kotlin</span>`,
+                    `Kotlin is a modern, concise, and safe programming language developed by JetBrains. In 2019, Google announced it as the preferred language for Android app developers.`,
+                    ` `,
+                    `<span class="text-yellow">Why it's popular:</span> It's fully interoperable with Java, meaning it can use all existing Java libraries, but it requires much less boilerplate code. Its key feature is "null safety," which helps eliminate the infamous "null pointer exception," a common source of crashes.`,
+                    ` `,
+                    `<span class="text-yellow">What it's for:</span> Primarily for Android app development, but it's also gaining traction for backend and web development.`
+                ])
+            },
+            'flutter': { category: 'Programming', description: 'Google\'s UI toolkit for cross-platform apps.',
+                execute: (cb) => cb([
+                    `<span class="output-section-title">Flutter</span>`,
+                    `Flutter is an open-source UI toolkit created by Google for building beautiful, natively compiled applications for mobile (iOS, Android), web, and desktop from a single codebase.`,
+                    ` `,
+                    `<span class="text-yellow">How it works:</span> Instead of relying on native platform widgets, Flutter uses its own high-performance rendering engine (Skia) to draw widgets. This gives developers complete control over the UI and ensures a consistent look and feel across all platforms.`,
+                    ` `,
+                    `<span class="text-yellow">Key Features:</span>`,
+                    ` - <span class="text-info">Single Codebase:</span> Write your app once and deploy it on multiple platforms.`,
+                    ` - <span class="text-info">Hot Reload:</span> See the effect of code changes in your app in under a second, which dramatically speeds up development.`,
+                    ` - <span class="text-info">Uses Dart:</span> A programming language also developed by Google, optimized for UI development.`
+                ])
+            },
+            'react': { category: 'Programming', description: 'A JavaScript library for building user interfaces.',
+                execute: (cb) => cb([
+                    `<span class="output-section-title">React.js</span>`,
+                    `React is a declarative, efficient, and flexible JavaScript library for building user interfaces. It lets you compose complex UIs from small and isolated pieces of code called "components".`,
+                    ` `,
+                    `<span class="text-yellow">Analogy:</span> Think of building a website with Lego bricks. Each component is a self-contained brick (like a search bar or a button). You can build these bricks independently and then assemble them to form a complex structure (your webpage).`,
+                    ` `,
+                    `<span class="text-yellow">How it works:</span> React uses a "virtual DOM" to efficiently update and render components. When data changes, React updates the virtual DOM first, then calculates the most efficient way to update the real browser DOM, leading to high performance.`,
+                    `<span class="text-yellow">What it's for:</span> Building modern, interactive single-page applications (SPAs) and dynamic web frontends.`
+                ]) 
+            },
+            'node': { category: 'Programming', description: 'JavaScript runtime built on Chrome\'s V8 engine.',
+                execute: (cb) => cb([
+                    `<span class="output-section-title">Node.js</span>`,
+                    `Node.js is a backend JavaScript runtime environment that allows developers to run JavaScript on the server.`,
+                    ` `,
+                     `<span class="text-yellow">Analogy:</span> Imagine a restaurant waiter. In a traditional (blocking) model, the waiter takes your order, gives it to the kitchen, and waits there until the food is ready. In the Node.js (non-blocking) model, the waiter takes your order, gives it to the kitchen, and immediately goes to serve other tables. This allows one waiter to handle many tables efficiently.`,
+                    ` `,
+                    `<span class="text-yellow">How it works:</span> It operates on a single-threaded event loop, handling many connections concurrently without creating new threads for each request. This makes it ideal for data-intensive, real-time applications.`,
+                    `<span class="text-yellow">What it's for:</span> Building fast and scalable network applications, APIs, microservices, and server-side logic.`
+                ])
+            },
+            'docker': { category: 'Programming', description: 'A platform for developing, shipping, and running applications in containers.',
+                execute: (cb) => cb([
+                    `<span class="output-section-title">Docker</span>`,
+                    `Docker is a tool that packages an application and its dependencies into a virtual container that can run on any computer.`,
+                    ` `,
+                    `<span class="text-yellow">Analogy:</span> Think of a shipping container. It doesn't matter what's inside (electronics, food, clothes)—the container itself is standardized and can be loaded onto any ship or train. Docker does the same for software. It packages your code and all its dependencies (libraries, settings) into a "container" that runs identically everywhere.`,
+                    ` `,
+                    `<span class="text-yellow">How it works:</span> It uses OS-level virtualization to deliver software in packages called containers. This eliminates the classic "it works on my machine" problem, simplifying deployment and enabling microservices architectures.`
+                ])
+            },
+            'apk': { category: 'Programming', description: 'The file format for Android apps.',
+                execute: (cb) => cb([
+                    `<span class="output-section-title">APK: Android Package Kit</span>`,
+                    `An APK is the file format that Android uses to distribute and install mobile apps.`,
+                    ` `,
+                    `<span class="text-yellow">Analogy:</span> An APK is to Android what an <span class="text-info">.exe</span> file is to Windows or a <span class="text-info">.dmg</span> file is to macOS. It's a single, packaged file that contains everything needed to install the application.`,
+                    ` `,
+                    `<span class="text-yellow">What's inside:</span> An APK file is essentially a ZIP archive containing all the app's assets, including:`,
+                    ` - <span class="text-info">The compiled code (DEX files).</span>`,
+                    ` - <span class="text-info">Resources (images, audio).</span>`,
+                    ` - <span class="text-info">The AndroidManifest.xml file, which describes the app's name, version, and required permissions.</span>`,
+                    ` - <span class="text-info">The app's digital certificate.</span>`,
+                ])
+            },
+            
+            // AI
+            'ai-concepts': { category: 'AI', description: 'Learn about AI use-cases.',
+                execute: (cb) => cb([
+                    `<span class="output-section-title">PART 1: AI Use-Cases (What's Possible?)</span>`,
+                    `AI is not just a buzzword; it's a powerful tool for creation and automation. Here's a glimpse of what you can do:`,
+                    ``,
+                    `<span class="text-yellow">🔹 Coding / Dev Work</span>`,
+                    ` - Auto-generate boilerplate code (Python, C++, JS).`,
+                    ` - Find and fix bugs automatically.`,
+                    ` - Structure entire applications or games.`,
+                    ` - Generate RESTful APIs from a description.`,
+                    ``,
+                    `<span class="text-yellow">🔹 Chatbots / Assistants</span>`,
+                    ` - Build bots for Discord, Telegram, or WhatsApp.`,
+                    ` - Automate customer support with intelligent agents.`,
+                    ` - Create voice assistants like Alexa or Siri.`,
+                    ``,
+                    `<span class="text-yellow">🔹 Content Creation</span>`,
+                    ` - Write entire blog posts or articles.`,
+                    ` - Generate social media captions and posts.`,
+                    ` - Brainstorm YouTube scripts and video ideas.`,
+                    ``,
+                    `<span class="text-yellow">🔹 Design & Image</span>`,
+                    ` - Design logos, thumbnails, and posters with text prompts.`,
+                    ` - Edit images, remove backgrounds, or restore photos.`,
+                    ` - Generate video clips from text (e.g., Sora, Pika).`,
+                    ``,
+                    `<span class="text-yellow">🔹 Automation</span>`,
+                    ` - Automate replies to emails.`,
+                    ` - Scrape data from websites.`,
+                    ` - Build intelligent task schedulers and bots.`,
+                ])
+            },
+            'ai-agent': { category: 'AI', description: 'Learn how to build your own AI agent.',
+                execute: (cb) => cb([
+                    `<span class="output-section-title">PART 2: How To Build Your Own AI Agent</span>`,
+                    `Creating a basic AI agent is more accessible than ever. Here's a simplified roadmap:`,
+                    ``,
+                    `<span class="text-purple">1. Choose Your Tool</span>`,
+                    `Your choice depends on your skill level.`,
+                    ` - <span class="text-warning">No-Code (Easy):</span> ChatGPT + Zapier, Flowise AI`,
+                    ` - <span class="text-warning">Low-Code (Medium):</span> OpenAI Assistants API, Langchain`,
+                    ` - <span class="text-warning">Advanced (Hard):</span> AutoGPT, Meta GPT, BabyAGI`,
+                    ``,
+                    `<span class="text-purple">2. Gather Requirements</span>`,
+                    ` - Basic Python knowledge.`,
+                    ` - An API key from an AI provider (e.g., OpenAI).`,
+                    ` - Optional libraries: Langchain, Pinecone (for memory), HuggingFace.`,
+                    ``,
+                    `<span class="text-purple">3. Basic Agent Code (Python Example)</span>`,
+                    `This example uses 'Langchain' to create an agent that can do math.`,
+                    `<div class="code-block"><span class="code-keyword">from</span> langchain.llms <span class="code-keyword">import</span> OpenAI
+<span class="code-keyword">from</span> langchain.agents <span class="code-keyword">import</span> initialize_agent, Tool
+
+llm = <span class="code-class">OpenAI</span>(openai_api_key=<span class="code-string">"YOUR_API_KEY"</span>)
+tools = [
+    <span class="code-class">Tool</span>(
+        name=<span class="code-string">"Calculator"</span>,
+        func=<span class="code-keyword">lambda</span> x: <span class="code-function">eval</span>(x),
+        description=<span class="code-string">"Performs basic math calculations"</span>,
+    )
+]
+
+agent = <span class="code-function">initialize_agent</span>(tools, llm, agent=<span class="code-string">"zero-shot-react-description"</span>, verbose=<span class="code-class">True</span>)
+agent.<span class="code-function">run</span>(<span class="code-string">"What is 5 * 9 + 2?"</span>)</div>`,
+                    ``,
+                    `<span class="text-purple">BONUS: Tools to Explore</span>`,
+                    ` - <span class="text-bright-green">LangChain:</span> For building agents with multiple tools.`,
+                    ` - <span class="text-bright-green">Auto-GPT:</span> For autonomous, goal-driven AI.`,
+                    ` - <span class="text-bright-green">Flowise:</span> For visual, drag-and-drop AI agent building.`,
+                    ` - <span class="text-bright-green">Gradio / Chainlit:</span> For creating web UIs for your AI models.`,
+                ])
+            },
+            'ml-deep-dive': { category: 'AI', description: 'A deeper look into Machine Learning concepts.',
+                execute: (cb) => cb([
+                    `<span class="output-section-title">Deep Dive: Machine Learning & AI</span>`,
+                    `Let's break down the core components of modern AI.`,
+                    ``,
+                    `<span class="text-yellow">🔹 Machine Learning (ML) Models</span>`,
+                    `It's about teaching computers to find patterns in data. There are three main ways they learn:`,
+                    ` - <span class="text-cyan">Supervised Learning:</span> Learns from labeled data. <span class="text-info">Analogy:</span> It's like a student learning with flashcards that have a picture (the data) and a name (the label). After seeing enough examples, the student can identify pictures they've never seen before.`,
+                    ` - <span class="text-cyan">Unsupervised Learning:</span> Learns from unlabeled data. <span class="text-info">Analogy:</span> You're given a box of mixed Lego bricks and asked to group them. You don't know what to call the groups, but you can create piles based on color, shape, and size. This is "clustering".`,
+                    ` - <span class="text-cyan">Reinforcement Learning:</span> Learns through trial and error. <span class="text-info">Analogy:</span> Teaching a dog a new trick. You don't show it how to sit; you just give it a treat (a reward) when it accidentally does. It quickly learns which action leads to the reward. This is how AI learns to play games.`,
+                    ``,
+                    `<span class="text-yellow">🔹 Deep Learning & Neural Networks</span>`,
+                    `A powerful type of ML that uses "neural networks" with many layers (hence "deep").`,
+                    ` - <span class="text-orange">What are Neural Networks?:</span> They're inspired by the human brain. They have layers of "neurons" (nodes) that process information.`,
+                    ` - <span class="text-orange">How do they learn?:</span> Each connection between neurons has a 'weight' that represents its importance. During training, the network makes a guess. If it's wrong, it adjusts these weights to make a better guess next time. This process, called "backpropagation," is repeated millions of times.`,
+                    ` - <span class="text-orange">The "Black Box" Problem:</span> Because deep networks have so many layers and connections, they can become a "black box"—we know they work very well, but it can be hard to understand exactly *why* they made a specific decision.`,
+                ])
+            },
+        };
+        
+        function typeLines(lines, callback, index = 0, noFinish = false) {
+            if (index >= lines.length) {
+                if (callback && !noFinish) callback();
+                return;
+            }
+            let html = lines[index];
+            // Add copy button to code blocks and command examples
+            if(html.includes('code-block') || html.includes('command-example')) {
+                html += ' <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>';
+            }
+            const line = document.createElement('div');
+            line.className = 'terminal-line';
+            line.innerHTML = html;
+            const currentInputLine = document.getElementById('inputLine');
+            terminalBody.insertBefore(line, currentInputLine);
+            scrollToBottom();
+            setTimeout(() => typeLines(lines, callback, index + 1, noFinish), 70);
+        }
+
+        function showIntroAnimation(onComplete) {
+            const ascii = [
+                '   _____      _           _   _      _   _             ',
+                '  |_   _|    | |         | | (_)    | | (_)            ',
+                '    | | _ __ | |_ ___  __| |  _  ___| |_ _  ___  _ __  ',
+                '    | ||  _ \| __/ _ \/ _` | | / __| __| |/ _ \|  _ \ ',
+                '   _| || | | | ||  __/ (_| | | \__ \ |_| | (_) | | | | ',
+                '   \___/_| |_|\__\___|\__,_| |_|___/\__|_|\___/|_| |_| ',
+                '','<span class="text-orange">Welcome to the <b>JAROUT.X</b> Terminal!</span>',
+                '<span class="text-warning">Type <b>help</b> for commands or <b>toolkit</b> for simulations.</span>'
+            ];
+            let i = 0;
+            function nextLine() {
+                if(i < ascii.length) {
+                    const line = document.createElement('div');
+                    line.className = 'terminal-line';
+                    line.innerHTML = ascii[i];
+                    const currentInputLine = document.getElementById('inputLine');
+                    terminalBody.insertBefore(line, currentInputLine);
+                    scrollToBottom();
+                    i++;
+                    setTimeout(nextLine, 80);
+                } else if(onComplete) {
+                    onComplete();
+                }
+            }
+            nextLine();
+        }
+
+        function appendInputLine() {
+            const inputDiv = document.createElement('div');
+            inputDiv.className = 'terminal-line input-line';
+            inputDiv.id = 'inputLine';
+            terminalBody.appendChild(inputDiv);
+            updateInputDisplay();
+        }
+
+        function updateInputDisplay() {
+            const inputDiv = document.getElementById('inputLine');
+            if(inputDiv) inputDiv.innerHTML = `${prompt}<span class="input-text">${currentInput}</span><span class="cursor"></span>`;
+            scrollToBottom();
+        }
+
+        function scrollToBottom() { terminalBody.scrollTop = terminalBody.scrollHeight; }
+
+        function selectHelpCategory(category) {
+            const categoryCommands = Object.entries(commands).filter(([_, val]) => val.category === category);
+            
+            let outputLines = [
+                `<span class="text-cyan">--- ${category} Commands ---</span>`,
+                ...categoryCommands.map(([name, val]) => `<div class="command-help"><span class="command-name">${name}</span><span>${val.description}</span></div>`),
+                ` `,
+                `Type a command name for details or 'exit' to return.`
+            ];
+            
+            typeLines(outputLines, () => {
+            terminalState = 'NORMAL';
+            }, 0, true);
+        }
+
+        // TOOLKIT LOGIC
+        function selectToolkit(toolId) {
+            const toolMap = {
+                '1': 'nmap-scan',
+                '2': 'hydra-attack',
+                '3': 'john-crack',
+                '4': 'nikto-scan',
+                '5': 'sqlmap-scan',
+                '6': 'burpsuite-proxy'
+            };
+            const toolName = toolMap[toolId];
+
+            if (toolName) {
+                activeToolkit = toolName;
+                terminalState = 'NORMAL'; 
+                typeLines([
+                    `<span class="text-warning">Starting simulation for ${toolName}...</span>`,
+                    `<span class="text-cyan">Enter target (e.g., a domain or IP) or type 'help'.</span>`
+                ], () => {}, 0, true);
+            }
+        }
+        
+        function handleToolkitInput(input) {
+            const [command, ...args] = input.split(' ');
+            const target = args[0] || '127.0.0.1'; // Default target
+
+            switch(activeToolkit) {
+                case 'nmap-scan':
+                    runNmapSim(target);
+                    break;
+                case 'hydra-attack':
+                    runHydraSim(target);
+                    break;
+                case 'john-crack':
+                    runJohnSim(target);
+                    break;
+                case 'nikto-scan':
+                    runNiktoSim(target);
+                    break;
+                case 'sqlmap-scan':
+                    runSqlmapSim(target);
+                    break;
+                case 'burpsuite-proxy':
+                    runBurpSuiteSim(target);
+                    break;
+            }
+        }
+
+        // TOOLKIT SIMULATIONS
+        function createProgressBar(callback) {
+            const progressContainer = document.createElement('div');
+            progressContainer.className = 'progress-bar-container';
+            const progressBar = document.createElement('div');
+            progressBar.className = 'progress-bar';
+            progressContainer.appendChild(progressBar);
+            terminalBody.insertBefore(progressContainer, terminalBody.lastChild);
+
+            let width = 0;
+            const interval = setInterval(() => {
+                width += Math.random() * 10;
+                if (width >= 100) {
+                    width = 100;
+                    progressBar.style.width = width + '%';
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        progressContainer.remove();
+                        if(callback) callback();
+                    }, 200);
+                }
+                progressBar.style.width = width + '%';
+            }, 150);
+        }
+
+        function runNmapSim(target) {
+                typeLines([
+                `Starting Nmap 7.92 scan on <span class="text-warning">${target}</span>`,
+                `Initiating SYN Stealth Scan...`
+            ], () => {
+                createProgressBar(() => {
+                    typeLines([
+                        `<span class="output-section-title">Scan Report for ${target}</span>`,
+                        `Host is up (0.052s latency).`,
+                        `Not shown: 996 closed tcp ports (reset)`,
+                        `PORT      STATE SERVICE`,
+                        `<span class="text-success">22/tcp</span>    open  ssh`,
+                        `<span class="text-success">80/tcp</span>    open  http`,
+                        `<span class="text-success">443/tcp</span>   open  https`,
+                        `<span class="text-danger">3306/tcp</span>  open  mysql`,
+                        `Nmap done: 1 IP address (1 host up) scanned in 2.58 seconds`
+                    ], () => { activeToolkit = null; terminalState = 'NORMAL'; }, 50);
+                });
+            }, 75, true);
+        }
+
+        function runHydraSim(target) {
+                   typeLines([
+                `Hydra v9.1 starting at ` + new Date().toISOString(),
+                `[INFO] Starting attack on <span class="text-warning">${target}</span> (service ssh) with 8 parallel tasks.`
+            ], () => {
+                createProgressBar(() => {
+                    typeLines([
+                        `<span class="text-success">[SUCCESS] 1 valid password found</span>`,
+                        `[22][ssh] host: <span class="text-warning">${target}</span> login: <span class="text-danger">root</span> password: <span class="text-danger">password123</span>`,
+                        `1 of 1 target successfully completed, 1 valid password found.`,
+                        `Hydra finished.`
+                    ], () => { activeToolkit = null; terminalState = 'NORMAL'; }, 50);
+                });
+            }, 75, true);
+        }
+
+        function runJohnSim(target) {
+            const hashFile = target || 'shadow.txt';
+             typeLines([
+                `Using default input encoding: UTF-8`,
+                `Loaded 1 password hash (sha512, 512/512 AVX2) for <span class="text-warning">${hashFile}</span>`,
+                `Press 'q' or Ctrl-C to abort, almost any other key for status`
+            ], () => {
+                createProgressBar(() => {
+                    typeLines([
+                        ` <span class="text-danger">password123</span>      (root)`,
+                        `1g 0:00:00:02 DONE 2/3 (2024-05-21 10:30) 0.48g/s 123p/s 123c/s 123C/s pass123..`,
+                        `Session completed.`
+                    ], () => { activeToolkit = null; terminalState = 'NORMAL'; }, 50);
+                });
+            }, 75, true);
+        }
+        
+        function runNiktoSim(target) {
+                    typeLines([
+                        `- Nikto v2.1.6`,
+                        `---------------------------------------------------------------------------`,
+                `+ Target IP:          <span class="text-warning">${target}</span>`,
+                `+ Target Hostname:    <span class="text-warning">${target}</span>`,
+                        `+ Target Port:        80`,
+                `+ Start Time:         ` + new Date().toISOString(),
+                `---------------------------------------------------------------------------`,
+                `+ Server: Apache/2.4.29 (Ubuntu)`,
+            ], () => {
+                createProgressBar(() => {
+                    typeLines([
+                        `<span class="text-danger-light">[!]</span> OSVDB-3233: <span class="text-danger">/icons/</span>: Apache is configured to serve directory listings.`,
+                        `<span class="text-danger-light">[!]</span> OSVDB-3092: <span class="text-danger">/cgi-bin/</span>: This might be interesting...`,
+                        `<span class="text-warning-light">[*]</span> OSVDB-3268: <span class="text-warning">/config.php</span>: Contains configuration info.`,
+                        `+ 6553 requests: 3 error(s) and 5 item(s) reported on remote host`,
+                        `+ End Time: ` + new Date().toISOString(),
+                        `---------------------------------------------------------------------------`,
+                        `+ 1 host(s) tested`
+                    ], () => { activeToolkit = null; terminalState = 'NORMAL'; }, 20);
+                });
+            }, 75, true);
+        }
+
+        function runSqlmapSim(target) {
+            typeLines([
+                `[INFO] starting sqlmap v1.5.11`,
+                `[INFO] testing connection to the target URL`,
+                `[INFO] checking if the target is protected by some kind of WAF/IPS/IDS`,
+                `[INFO] testing for SQL injection on GET parameter 'id'`,
+            ], () => {
+                createProgressBar(() => {
+                    typeLines([
+                        `<span class="output-section-title">SQL Injection Found</span>`,
+                        `Parameter: id (GET)`,
+                        `Type: boolean-based blind`,
+                        `Title: AND boolean-based blind - WHERE or HAVING clause`,
+                        `Payload: id=1' AND '1'='1`,
+                        ` `,
+                        `<span class="text-danger">[CRITICAL]</span> Found 1 vulnerable parameter.`,
+                        `<span class="text-yellow">Databases available:</span> information_schema, mysql, performance_schema, users_db`,
+                        `sqlmap finished.`
+                    ], () => { activeToolkit = null; terminalState = 'NORMAL'; }, 50);
+                });
+            }, 75, true);
+        }
+
+        function runBurpSuiteSim(target) {
+            typeLines([
+                `Burp Suite Professional v2023.10`,
+                `Proxy listener started on http://127.0.0.1:8080`,
+                `Intercepting browser traffic...`,
+            ], () => {
+                setTimeout(() => {
+                    typeLines([
+                        `<span class="output-section-title">--- INTERCEPTED REQUEST ---</span>`,
+                        `GET /profile?id=123 HTTP/1.1`,
+                        `Host: <span class="text-warning">${target}</span>`,
+                        `User-Agent: Mozilla/5.0 ...`,
+                        `Cookie: session=xyz...`,
+                        `<span class="output-section-title">-------------------------</span>`,
+                        `Simulating modification: Changed id from '123' to '123 OR 1=1'`,
+                        `Forwarding modified request to server...`,
+                    ], () => {
+                        createProgressBar(() => {
+                            typeLines([
+                                `<span class="output-section-title">--- SERVER RESPONSE ---</span>`,
+                                `HTTP/1.1 200 OK`,
+                                `Content-Type: application/json`,
+                                ``,
+                                `{ "user_id": 123, "error": "Login failed" }`,
+                                ``,
+                                `<span class="text-success">Simulation complete.</span>`
+                            ], () => { activeToolkit = null; terminalState = 'NORMAL'; }, 50);
+                        });
+                    }, 50, true);
+                }, 1000);
+            }, 75, true);
+        }
+
+        function handleCommand() {
+            const commandText = currentInput.trim();
+            const commandDisplay = commandText ? prompt + commandText : prompt;
+            const line = document.createElement('div');
+            line.className = 'terminal-line';
+            line.innerHTML = commandDisplay;
+            terminalBody.insertBefore(line, document.getElementById('inputLine'));
+            
+            if(commandText) commandHistory.unshift(commandText);
+            historyIndex = -1;
+            currentInput = '';
+            updateInputDisplay();
+
+            if (terminalState === 'TOOLKIT' && activeToolkit) {
+                handleToolkitInput(commandText);
+                return;
+            }
+
+            if (terminalState === 'HELP_SELECTION' || terminalState === 'TOOLKIT') {
+                const [command, ...args] = commandText.toLowerCase().split(' ');
+                
+                // If the user types a valid command, execute it immediately.
+                if (commands[command]) {
+                    terminalState = 'NORMAL';
+                    activeToolkit = null;
+                    commands[command].execute((output) => {
+                        if (output && output.length > 0) typeLines(output);
+                    }, args);
+                    return;
+                }
+
+                const selection = parseInt(commandText);
+                const isSelectionANumber = !isNaN(selection);
+
+                if (isSelectionANumber) {
+                    if (terminalState === 'HELP_SELECTION') {
+                        const categories = [...new Set(Object.values(commands).map(c => c.category))];
+                        if (selection > 0 && selection <= categories.length) {
+                            selectHelpCategory(categories[selection - 1]);
+                } else {
+                    terminalState = 'NORMAL';
+                            typeLines([`Invalid selection. Returning to shell.`]);
+                        }
+                    } else if (terminalState === 'TOOLKIT') {
+                        const toolMap = { '1': 'nmap-scan', '2': 'hydra-attack', '3': 'john-crack', '4': 'nikto-scan', '5': 'sqlmap-scan', '6': 'burpsuite-proxy' };
+                        if(toolMap[selection]) {
+                            selectToolkit(selection);
+                        } else {
+                            terminalState = 'NORMAL';
+                            typeLines([`Invalid selection. Returning to shell.`]);
+                        }
+                    }
+                } else {
+                    // Not a number and not a command.
+                    terminalState = 'NORMAL';
+                    typeLines([`Invalid selection. Returning to shell.`]);
+                }
+                return;
+            }
+
+            const [command, ...args] = commandText.toLowerCase().split(' ');
+            if (commands[command]) {
+                commands[command].execute((output) => {
+                    if (output && output.length > 0) typeLines(output);
+                }, args);
+            } else if (commandText) {
+                typeLines([`<span class="text-danger">Command not found: ${command}</span>`]);
+            }
+        }
+        
+        // Autocomplete (Tab key)
+        document.addEventListener('keydown', (e) => {
+            // If an input field is focused, don't capture keys for the terminal.
+            const activeElTag = document.activeElement ? document.activeElement.tagName : null;
+            if (activeElTag === 'INPUT' || activeElTag === 'TEXTAREA' || activeElTag === 'BUTTON') {
+                return;
+            }
+
+            // For all other cases, prevent the default browser action (e.g., page search on key press)
+                e.preventDefault();
+
+            if (e.key.length === 1 && !e.ctrlKey && !e.metaKey) {
+                currentInput += e.key;
+            } else if (e.key === 'Backspace') {
+                currentInput = currentInput.slice(0, -1);
+            } else if (e.key === 'Enter') {
+                handleCommand();
+            } else if (e.key === 'ArrowUp') {
+                if (historyIndex < commandHistory.length - 1) {
+                    currentInput = commandHistory[++historyIndex];
+                }
+            } else if (e.key === 'ArrowDown') {
+                if (historyIndex > 0) {
+                    currentInput = commandHistory[--historyIndex];
+                } else {
+                    historyIndex = -1;
+                    currentInput = '';
+                }
+            } else if (e.key === 'Tab') {
+                const possible = Object.keys(commands).filter(cmd => cmd.startsWith(currentInput.toLowerCase()));
+                if (possible.length === 1) {
+                    currentInput = possible[0] + ' ';
+                } else if (possible.length > 1) {
+                    typeLines([`<span class="text-info">${possible.join('   ')}</span>`]);
+                }
+            } else {
+                return; // Ignore other special keys
+            }
+            updateInputDisplay();
+        });
+
+        function initTerminal() {
+            terminalBody.innerHTML = '';
+            appendInputLine();
+            showIntroAnimation(() => { updateInputDisplay(); });
+
+            // Matrix BG (make code rain more visible)
+            const canvas = document.getElementById('matrix-bg');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%+-/~{[|`]}';
+            const fontSize = 18;
+            const columns = canvas.width / fontSize;
+            const drops = Array(Math.floor(columns)).fill(1);
+            function drawMatrix() {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#00ff7f';
+                ctx.font = `bold ${fontSize}px monospace`;
+                for (let i = 0; i < drops.length; i++) {
+                    const text = letters[Math.floor(Math.random() * letters.length)];
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                    drops[i]++;
+                }
+            }
+            setInterval(drawMatrix, 33);
+        }
+
+        // Animated progress bar for long commands
+        function animatedProgressBar(duration, cb) {
+            const progressContainer = document.createElement('div');
+            progressContainer.className = 'progress-bar-container';
+            const progressBar = document.createElement('div');
+            progressBar.className = 'progress-bar';
+            progressContainer.appendChild(progressBar);
+            terminalBody.insertBefore(progressContainer, terminalBody.lastChild);
+            let width = 0;
+            const interval = setInterval(() => {
+                width += 100/(duration/50);
+                if (width >= 100) {
+                    width = 100;
+                    progressBar.style.width = width + '%';
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        progressContainer.remove();
+                        if(cb) cb();
+                    }, 200);
+                }
+                progressBar.style.width = width + '%';
+            }, 50);
+        }
+
+        initTerminal();
+
+        // Boot sequence and animated intro
+        const introBootLines = [
+            'Booting JAROUT.X Terminal... [OK]',
+            'Loading modules: [██████████] 100%',
+            'Establishing secure shell... [OK]',
+            'Welcome, hacker.',
+            ''
+        ];
+        const introAsciiArt = [
+            '   _____      _           _   _      _   _             ',
+            '  |_   _|    | |         | | (_)    | | (_)            ',
+            '    | | _ __ | |_ ___  __| |  _  ___| |_ _  ___  _ __  ',
+            '    | ||  _ \| __/ _ \/ _` | | / __| __| |/ _ \|  _ \ ',
+            '   _| || | | | ||  __/ (_| | | \__ \ |_| | (_) | | | | ',
+            '   \___/_| |_|\__\___|\__,_| |_|___/\__|_|\___/|_| |_| ',
+            '',
+            'Welcome to the <span style="color:#ff7f00">JAROUT.X</span> Terminal!',
+            'Type <span style="color:#ffff00">help</span> for commands or <span style="color:#00ffff">toolkit</span> for simulations.'
+        ];
+        function colorCycle(i) {
+            const colors = ['#00ff7f','#00ffff','#9d00ff','#ff7f00','#ffff00'];
+            return colors[i % colors.length];
+        }
+        function flickerText(text) {
+            // Randomly replace some chars with glitch chars
+            const chars = '!<>-_\/[]{}—=+*^?#_';
+            return text.split('').map(c => (Math.random()<0.07 && c!==' ')?chars[Math.floor(Math.random()*chars.length)]:c).join('');
+        }
+        async function runIntro() {
+            const overlay = document.getElementById('intro-overlay');
+            const ascii = document.getElementById('intro-ascii');
+            const cursor = document.getElementById('intro-cursor');
+            // Boot lines
+            for(const line of introBootLines) {
+                ascii.innerHTML += `<span style='color:#00ff7f'>${line}</span>\n`;
+                await new Promise(r=>setTimeout(r, 400));
+            }
+            // Animated ASCII art
+            for(let i=0;i<introAsciiArt.length;i++) {
+                let line = '';
+                for(let j=0;j<introAsciiArt[i].length;j++) {
+                    line += `<span style='color:${colorCycle(i+j)}'>${flickerText(introAsciiArt[i][j])}</span>`;
+                    ascii.innerHTML = introAsciiArt.slice(0,i).map(l=>`<span style='color:${colorCycle(i)}'>${l}</span>`).join('\n') + '\n' + line;
+                    await new Promise(r=>setTimeout(r, 8 + Math.random()*12));
+                }
+                ascii.innerHTML += '\n';
+                await new Promise(r=>setTimeout(r, 80));
+            }
+            // Flicker/fade out
+            for(let k=0;k<6;k++) {
+                overlay.style.opacity = k%2?0.7:1;
+                await new Promise(r=>setTimeout(r, 80));
+            }
+            overlay.style.transition = 'opacity 0.7s';
+            overlay.style.opacity = 0;
+            setTimeout(()=>overlay.remove(), 700);
+        }
+        runIntro();
+
+        // Make terminal window draggable
+        (function(){
+            const win = document.getElementById('terminalWindow');
+            const bar = document.getElementById('titlebar');
+            let isDrag = false, startX=0, startY=0, winX=0, winY=0;
+            bar.addEventListener('mousedown',e=>{
+                isDrag=true;startX=e.clientX;startY=e.clientY;
+                const rect=win.getBoundingClientRect();winX=rect.left;winY=rect.top;
+            });
+            document.addEventListener('mousemove',e=>{
+                if(isDrag){
+                    win.style.left = (winX + e.clientX - startX) + 'px';
+                    win.style.top = (winY + e.clientY - startY) + 'px';
+                    win.style.right = 'auto';
+                }
+            });
+            document.addEventListener('mouseup',()=>isDrag=false);
+        })();
+
+        // Random glitch lines
+        setInterval(()=>{
+            if(Math.random()<0.13 && document.getElementById('terminalBody')){
+                const glitch = document.createElement('div');
+                glitch.className = 'glitch-line';
+                glitch.textContent = '█▓▒░ SYSTEM GLITCH DETECTED ░▒▓█';
+                document.getElementById('terminalBody').appendChild(glitch);
+                setTimeout(()=>glitch.remove(), 600+Math.random()*800);
+            }
+        }, 1800);
+
+        setTimeout(runIntro, 100);
+    </script>
+</body>
+</html> 

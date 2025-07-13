@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JAYROUT.X | Programmer | Ethical Hacker | Editor | AI Expert</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Three.js for 3D animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- GSAP for smooth animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <!-- GSAP ScrollTrigger plugin -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/ScrollTrigger.min.js"></script>
+    <!-- GSAP ScrollTo plugin -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/ScrollToPlugin.min.js"></script>
+    <!-- Particles.js for background effects -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="custom-cursor">
+        <div class="cursor-dot"></div>
+        <div class="cursor-ring"></div>
+    </div>
+    
+    <!-- Loading Screen -->
+    <div class="loading-screen">
+        <div class="logo-container">
+            <div class="logo">JR</div>
+            <div class="wings">
+                <div class="wing left"></div>
+                <div class="wing right"></div>
+            </div>
+        </div>
+        <div class="loading-bar">
+            <div class="progress"></div>
+        </div>
+        <div class="loading-text">INITIALIZING SYSTEM</div>
+    </div>
+
+    <!-- Sound Toggle -->
+    <div class="sound-toggle">
+        <i class="fas fa-volume-mute" id="sound-icon"></i>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-logo">JAYROUT.X</div>
+        <div class="nav-links">
+            <a href="#hero" class="nav-link">Home</a>
+            <a href="#certifications" class="nav-link">Certifications</a>
+            <a href="#portfolio" class="nav-link">Portfolio</a>
+            <a href="#hacking-lab" class="nav-link">Hacking Lab</a>
+            <a href="#editing-studio" class="nav-link">Editing Studio</a>
+            <a href="#programming" class="nav-link">Programming</a>
+            <a href="#contact" class="nav-link">Contact</a>
+        </div>
+        <div class="nav-toggle">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section id="hero" class="hero-section">
+            <div id="particles-js" class="particles-container"></div>
+            <div class="hero-content">
+                <div class="profile-container">
+                    <div class="profile-wings">
+                        <div class="wing left-wing"></div>
+                        <div class="profile-image"></div>
+                        <div class="wing right-wing"></div>
+                    </div>
+                </div>
+                <h1 class="glitch-text" data-text="JAY ROUT">JAY ROUT</h1>
+                <div class="title-container">
+                    <div class="title-badge">Certified Programmer & Ethical Hacker</div>
+                </div>
+                <div class="animated-text">
+                    <span class="text" data-text="All Programming Languages Mastered"></span>
+                </div>
+                <div class="skills-text">
+                    <span class="skill">AI</span>
+                    <span class="separator">|</span>
+                    <span class="skill">Hacking</span>
+                    <span class="separator">|</span>
+                    <span class="skill">Editing</span>
+                    <span class="separator">|</span>
+                    <span class="skill">Coding</span>
+                </div>
+                <div class="cta-buttons">
+                    <a href="#" class="cta-button primary">Download Resume</a>
+                    <a href="#" class="cta-button secondary">Join Discord Lab</a>
+                </div>
+                <div class="scroll-indicator">
+                    <span>Scroll Down</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- Certifications Section -->
+        <section id="certifications" class="section">
+            <div class="section-header">
+                <h2 data-text="Certifications">Certifications</h2>
+                <div class="section-line"></div>
+            </div>
+            <div class="certifications-container">
+                <div class="cert-card" data-cert="Python" data-certificate="images/Python.png">
+                    <div class="cert-icon"><i class="fab fa-python"></i></div>
+                    <h3>Python Expert</h3>
+                    <p>Advanced Programming & AI Development</p>
+                </div>
+                <div class="cert-card" data-cert="C++">
+                    <div class="cert-icon"><i class="fas fa-code"></i></div>
+                    <h3>C++ Master</h3>
+                    <p>System Programming & Game Development</p>
+                </div>
+                <div class="cert-card" data-cert="Java" data-certificate="images/Java.PNG">
+                    <div class="cert-icon"><i class="fab fa-java"></i></div>
+                    <h3>Java Professional</h3>
+                    <p>Enterprise Applications & Android Development</p>
+                </div>
+                <div class="cert-card" data-cert="Kotlin" data-certificate="images/Kotlin.PNG">
+                    <div class="cert-icon"><i class="fab fa-android"></i></div>
+                    <h3>Kotlin Expert</h3>
+                    <p>Modern Android App Development</p>
+                </div>
+                <div class="cert-card" data-cert="CEH" data-certificate="images/CertifiedEthicalHacker1.PNG">
+                    <div class="cert-icon"><i class="fas fa-shield-alt"></i></div>
+                    <h3>Certified Ethical Hacker</h3>
+                    <p>Penetration Testing & Security Analysis</p>
+                </div>
+                <div class="cert-card" data-cert="AI/ML">
+                    <div class="cert-icon"><i class="fas fa-brain"></i></div>
+                    <h3>AI/ML Specialist</h3>
+                    <p>Deep Learning & Neural Networks</p>
+                </div>
+                <div class="cert-card" data-cert="Video">
+                    <div class="cert-icon"><i class="fas fa-video"></i></div>
+                    <h3>Video Editing Pro</h3>
+                    <p>Professional Video Production & Effects</p>
+                </div>
+               
+            </div>
+            
+            <!-- Certificate Modal -->
+            <div class="certificate-modal">
+                <div class="certificate-container">
+                    <div class="certificate-close"><i class="fas fa-times"></i></div>
+                    <img src="" alt="Certificate" id="certificate-image">
+                    <div class="certificate-controls">
+                        <button class="download-certificate-btn">
+                            <i class="fas fa-download"></i> Download Certificate
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Portfolio Section -->
+        <section id="portfolio" class="section">
+            <div class="section-header">
+                <h2 data-text="Tech Portfolio">Tech Portfolio</h2>
+                <div class="section-line"></div>
+            </div>
+            <div class="portfolio-filter">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="web">Web Dev</button>
+                <button class="filter-btn" data-filter="android">Android Apps</button>
+                <button class="filter-btn" data-filter="hacking">Hacking Tools</button>
+                <button class="filter-btn" data-filter="editing">Editing Projects</button>
+            </div>
+            <div class="portfolio-grid">
+                <!-- Web Dev Projects -->
+                <div class="portfolio-item web">
+                    <div class="portfolio-image"></div>
+                    <div class="portfolio-overlay">
+                        <h3>Quantum Dashboard</h3>
+                        <p>Advanced analytics platform with AI integration</p>
+                        <div class="portfolio-links">
+                            <a href="#" class="demo-link">Live Demo</a>
+                            <a href="#" class="github-link"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="portfolio-item web">
+                    <div class="portfolio-image"></div>
+                    <div class="portfolio-overlay">
+                        <h3>NeoBank Interface</h3>
+                        <p>Futuristic banking UI with blockchain security</p>
+                        <div class="portfolio-links">
+                            <a href="#" class="demo-link">Live Demo</a>
+                            <a href="#" class="github-link"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Android Apps -->
+                <div class="portfolio-item android">
+                    <div class="portfolio-image"></div>
+                    <div class="portfolio-overlay">
+                        <h3>CryptoTracker Pro</h3>
+                        <p>Real-time cryptocurrency monitoring app</p>
+                        <div class="portfolio-links">
+                            <a href="#" class="demo-link">App Demo</a>
+                            <a href="#" class="github-link"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="portfolio-item android">
+                    <div class="portfolio-image"></div>
+                    <div class="portfolio-overlay">
+                        <h3>SecureChat</h3>
+                        <p>End-to-end encrypted messaging platform</p>
+                        <div class="portfolio-links">
+                            <a href="#" class="demo-link">App Demo</a>
+                            <a href="#" class="github-link"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hacking Tools -->
+                <div class="portfolio-item hacking">
+                    <div class="portfolio-image"></div>
+                    <div class="portfolio-overlay">
+                        <h3>NetScan</h3>
+                        <p>Advanced network vulnerability scanner</p>
+                        <div class="portfolio-links">
+                            <a href="#" class="demo-link">Tool Demo</a>
+                            <a href="#" class="github-link"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="portfolio-item hacking">
+                    <div class="portfolio-image"></div>
+                    <div class="portfolio-overlay">
+                        <h3>SecAudit</h3>
+                        <p>Automated security auditing framework</p>
+                        <div class="portfolio-links">
+                            <a href="#" class="demo-link">Tool Demo</a>
+                            <a href="#" class="github-link"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Editing Projects -->
+                <div class="portfolio-item editing">
+                    <div class="portfolio-image"></div>
+                    <div class="portfolio-overlay">
+                        <h3>Cyberpunk Intro</h3>
+                        <p>Futuristic video intro template</p>
+                        <div class="portfolio-links">
+                            <a href="#" class="demo-link">Watch</a>
+                            <a href="#" class="youtube-link"><i class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="portfolio-item editing">
+                    <div class="portfolio-image"></div>
+                    <div class="portfolio-overlay">
+                        <h3>Tech Promo</h3>
+                        <p>High-end product showcase animation</p>
+                        <div class="portfolio-links">
+                            <a href="#" class="demo-link">Watch</a>
+                            <a href="#" class="youtube-link"><i class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="social-links">
+                <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </section>
+
+        <!-- Hacking & Cybersecurity Lab -->
+        <section id="hacking-lab" class="section dark-section">
+            <div class="section-header">
+                <h2 data-text="Hacking & Cybersecurity Lab">Hacking & Cybersecurity Lab</h2>
+                <div class="section-line"></div>
+            </div>
+            <div class="terminal-container">
+                <div class="terminal-header">
+                    <div class="terminal-buttons">
+                        <span class="terminal-btn close"></span>
+                        <span class="terminal-btn minimize"></span>
+                        <span class="terminal-btn maximize"></span>
+                    </div>
+                    <div class="terminal-title">jayrout@x-terminal:~</div>
+                </div>
+                <div class="terminal-body">
+                    <div class="terminal-line">$ <span class="typing-text">Welcome to Jay Rout's Ethical Hacking Lab</span></div>
+                    <div class="terminal-line">$ <span class="typing-text">Initializing security modules...</span></div>
+                    <div class="terminal-line">$ <span class="typing-text">Loading resources...</span></div>
+                    <div class="terminal-line">$ <span class="typing-text">Access granted.</span></div>
+                    <div class="terminal-line">$ <span class="typing-text">Type 'help' to see available commands</span></div>
+                    <div class="terminal-line terminal-input">
+                        $ <span id="terminal-input-span"></span><span id="terminal-cursor" class="cursor"></span>
+                    </div>
+                </div>
+                <div class="matrix-rain-container">
+                    <canvas id="matrix-rain"></canvas>
+                </div>
+            </div>
+            <div class="hacking-content">
+                <div class="hacking-levels">
+                    <div class="level-card">
+                        <h3>Basic Level</h3>
+                        <ul>
+                            <li>Introduction to Cybersecurity</li>
+                            <li>Network Fundamentals</li>
+                            <li>Basic Penetration Testing</li>
+                            <li>Security Tools Overview</li>
+                        </ul>
+                        <a href="#" class="level-btn">Start Learning</a>
+                    </div>
+                    <div class="level-card">
+                        <h3>Intermediate Level</h3>
+                        <ul>
+                            <li>Web Application Security</li>
+                            <li>Network Penetration Testing</li>
+                            <li>Wireless Network Security</li>
+                            <li>Cryptography Basics</li>
+                        </ul>
+                        <a href="#" class="level-btn">Start Learning</a>
+                    </div>
+                    <div class="level-card">
+                        <h3>Advanced Level</h3>
+                        <ul>
+                            <li>Advanced Exploitation</li>
+                            <li>Reverse Engineering</li>
+                            <li>Malware Analysis</li>
+                            <li>Red Team Operations</li>
+                        </ul>
+                        <a href="#" class="level-btn">Start Learning</a>
+                    </div>
+                </div>
+                <div class="tools-section">
+                    <h3>Ethical Hacking Tools</h3>
+                    <div class="tools-grid">
+                        <div class="tool-item">
+                            <div class="tool-icon"><i class="fas fa-wifi"></i></div>
+                            <h4>Network Analysis</h4>
+                            <p>Tools for network scanning and analysis</p>
+                        </div>
+                        <div class="tool-item">
+                            <div class="tool-icon"><i class="fas fa-bug"></i></div>
+                            <h4>Vulnerability Assessment</h4>
+                            <p>Tools to identify security vulnerabilities</p>
+                        </div>
+                        <div class="tool-item">
+                            <div class="tool-icon"><i class="fas fa-lock"></i></div>
+                            <h4>Password Cracking</h4>
+                            <p>Ethical password auditing tools</p>
+                        </div>
+                        <div class="tool-item">
+                            <div class="tool-icon"><i class="fas fa-globe"></i></div>
+                            <h4>Web Security</h4>
+                            <p>Web application security testing tools</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="terminal-access">
+                <a href="login.html" class="terminal-btn">
+                    <i class="fas fa-terminal"></i> Access Terminal
+                </a>
+            </div>
+        </section>
+
+        <!-- Editing Studio -->
+        <section id="editing-studio" class="section">
+            <div class="section-header">
+                <h2 data-text="Editing Studio">Editing Studio</h2>
+                <div class="section-line"></div>
+            </div>
+            <div class="editing-showcase">
+                <div class="before-after-container">
+                    <div class="comparison-slider">
+                        <div class="before-image" style="background-image: url('https://images.unsplash.com/photo-1500462918059-b1a0cb512f1d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');"></div>
+                        <div class="after-image" style="background-image: url('https://images.unsplash.com/photo-1500462918059-b1a0cb512f1d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80&blend=6600FF&blend-mode=hue&sat=-30&con=20');"></div>
+                        <div class="slider-handle"></div>
+                    </div>
+                    <div class="comparison-labels">
+                        <span class="before-label">Before</span>
+                        <span class="after-label">After</span>
+                    </div>
+                </div>
+                <div class="editing-info">
+                    <h3>Professional Video & Image Editing</h3>
+                    <p>Transform your content with cutting-edge editing techniques and visual effects.</p>
+                    <div class="software-used">
+                        <h4>Software Mastery:</h4>
+                        <div class="software-icons">
+                            <div class="software-icon" data-tooltip="Adobe Premiere Pro">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Adobe_Premiere_Pro_CC_icon.svg/512px-Adobe_Premiere_Pro_CC_icon.svg.png" alt="Premiere Pro">
+                                <span>Premiere</span>
+                            </div>
+                            <div class="software-icon" data-tooltip="Adobe After Effects">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Adobe_After_Effects_CC_icon.svg/512px-Adobe_After_Effects_CC_icon.svg.png" alt="After Effects">
+                                <span>After Effects</span>
+                            </div>
+                            <div class="software-icon" data-tooltip="Adobe Photoshop">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Adobe_Photoshop_CC_icon.svg/512px-Adobe_Photoshop_CC_icon.svg.png" alt="Photoshop">
+                                <span>Photoshop</span>
+                            </div>
+                            <div class="software-icon" data-tooltip="CapCut Pro">
+                                <img src="images/CAPCUT.png" alt="CapCut">
+                                <span>CapCut</span>
+                            </div>
+                            <div class="software-icon" data-tooltip="DaVinci Resolve">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/DaVinci_Resolve_17_logo.svg/512px-DaVinci_Resolve_17_logo.svg.png" alt="DaVinci Resolve">
+                                <span>DaVinci</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="templates-section">
+                <h3>Downloadable Templates</h3>
+                <div class="templates-grid">
+                    <div class="template-card">
+                        <div class="template-preview"></div>
+                        <h4>Cyberpunk Intro</h4>
+                        <p>Futuristic video intro with neon effects</p>
+                        <a href="#" class="download-btn">Download</a>
+                    </div>
+                    <div class="template-card">
+                        <div class="template-preview"></div>
+                        <h4>Tech Slideshow</h4>
+                        <p>Dynamic tech-themed transitions</p>
+                        <a href="#" class="download-btn">Download</a>
+                    </div>
+                    <div class="template-card">
+                        <div class="template-preview"></div>
+                        <h4>Glitch Effects Pack</h4>
+                        <p>Collection of digital glitch transitions</p>
+                        <a href="#" class="download-btn">Download</a>
+                    </div>
+                    <div class="template-card">
+                        <div class="template-preview"></div>
+                        <h4>HUD Elements</h4>
+                        <p>Futuristic interface elements</p>
+                        <a href="#" class="download-btn">Download</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Programming Mastery -->
+        <section id="programming" class="section dark-section">
+            <div class="section-header">
+                <h2 data-text="Programming Mastery">Programming Mastery</h2>
+                <div class="section-line"></div>
+            </div>
+            <div class="programming-intro">
+                <h3>From Hello World to AI Bots</h3>
+                <p>Explore my journey through multiple programming paradigms and languages.</p>
+                <div class="programming-badges">
+                    <div class="badge-item" data-tooltip="1+ Years Experience">
+                        <div class="badge-icon"><i class="fas fa-code"></i></div>
+                        <div class="badge-text">Master Coder</div>
+                    </div>
+                    <div class="badge-item" data-tooltip="Intermediate AI Development">
+                        <div class="badge-icon"><i class="fas fa-brain"></i></div>
+                        <div class="badge-text">AI Expert</div>
+                    </div>
+                    <div class="badge-item" data-tooltip="Full Stack Development">
+                        <div class="badge-icon"><i class="fas fa-layer-group"></i></div>
+                        <div class="badge-text">Full Stack</div>
+                    </div>
+                    <div class="badge-item" data-tooltip="Mobile App Development">
+                        <div class="badge-icon"><i class="fas fa-mobile-screen-button"></i></div>
+                        <div class="badge-text">Mobile Dev</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="programming-journey">
+                <div class="journey-header">
+                    <h3>My Coding Journey</h3>
+                    <div class="journey-line"></div>
+                </div>
+                <div class="journey-timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h4>Beginner Phase</h4>
+                            <p>Started with HTML, CSS, and basic JavaScript. Built simple websites and games.</p>
+                            <span class="timeline-date">2023/04/18</span>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h4>Intermediate Developer</h4>
+                            <p>Running Python, Java, and C++. Created desktop applications and backend systems.</p>
+                            <span class="timeline-date">2024/02/11</span>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h4>Advanced Programming</h4>
+                            <p>Developed complex algorithms, machine learning models, and distributed systems.</p>
+                            <span class="timeline-date">2025/01/28</span>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h4>AI & Quantum Computing</h4>
+                            <p>Exploring cutting-edge AI models, quantum algorithms, and next-gen technologies.</p>
+                            <span class="timeline-date">Present</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="language-tabs">
+                <div class="tab-buttons">
+                    <button class="tab-btn active" data-tab="python">Python</button>
+                    <button class="tab-btn" data-tab="cpp">C++</button>
+                    <button class="tab-btn" data-tab="java">Java</button>
+                    <button class="tab-btn" data-tab="javascript">JavaScript</button>
+                    <button class="tab-btn" data-tab="dart">Dart</button>
+                    <button class="tab-btn" data-tab="sql">SQL</button>
+                </div>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="python-tab">
+                        <div class="language-content">
+                            <div class="language-info">
+                                <div class="language-icon"><i class="fab fa-python"></i></div>
+                                <div class="language-stats">
+                                    <div class="stat">
+                                        <span class="stat-value">42</span>
+                                        <span class="stat-label">Projects</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-value">Expert</span>
+                                        <span class="stat-label">Level</span>
+                                    </div>
+                                </div>
+                                <div class="language-badges">
+                                    <span class="badge">AI/ML</span>
+                                    <span class="badge">Data Science</span>
+                                    <span class="badge">Web Dev</span>
+                                    <span class="badge">Automation</span>
+                                </div>
+                            </div>
+                            <div class="code-preview">
+                                <pre><code class="language-python">
+# AI Neural Network Example
+import tensorflow as tf
+from tensorflow.keras import layers
+
+def create_neural_network():
+    model = tf.keras.Sequential([
+        layers.Dense(128, activation='relu'),
+        layers.Dropout(0.2),
+        layers.Dense(64, activation='relu'),
+        layers.Dense(10, activation='softmax')
+    ])
+    return model
+
+# Initialize and compile model
+model = create_neural_network()
+model.compile(
+    optimizer='adam',
+    loss='sparse_categorical_crossentropy',
+    metrics=['accuracy']
+)
+                                </code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="cpp-tab">
+                        <div class="language-content">
+                            <div class="language-info">
+                                <div class="language-icon"><i class="fas fa-code"></i></div>
+                                <div class="language-stats">
+                                    <div class="stat">
+                                        <span class="stat-value">35</span>
+                                        <span class="stat-label">Projects</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-value">Mastery</span>
+                                        <span class="stat-label">Level</span>
+                                    </div>
+                                </div>
+                                <div class="language-badges">
+                                    <span class="badge">Game Dev</span>
+                                    <span class="badge">System Programming</span>
+                                    <span class="badge">Algorithms</span>
+                                    <span class="badge">Performance</span>
+                                </div>
+                            </div>
+                            <div class="code-preview">
+                                <pre><code class="language-cpp">
+// Advanced Game Physics Engine
+#include <iostream>
+#include <vector>
+#include <memory>
+
+class PhysicsObject {
+private:
+    Vector3 position;
+    Vector3 velocity;
+    float mass;
+    
+public:
+    PhysicsObject(Vector3 pos, float m) : 
+        position(pos), mass(m), velocity(Vector3(0,0,0)) {}
+    
+    void applyForce(const Vector3& force) {
+        Vector3 acceleration = force / mass;
+        velocity += acceleration;
+    }
+    
+    void update(float deltaTime) {
+        position += velocity * deltaTime;
+    }
+};
+                                </code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="java-tab">
+                        <div class="language-content">
+                            <div class="language-info">
+                                <div class="language-icon"><i class="fab fa-java"></i></div>
+                                <div class="language-stats">
+                                    <div class="stat">
+                                        <span class="stat-value">28</span>
+                                        <span class="stat-label">Projects</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-value">Mastery</span>
+                                        <span class="stat-label">Level</span>
+                                    </div>
+                                </div>
+                                <div class="language-badges">
+                                    <span class="badge">Enterprise</span>
+                                    <span class="badge">Android</span>
+                                    <span class="badge">Spring Boot</span>
+                                    <span class="badge">Microservices</span>
+                                </div>
+                            </div>
+                            <div class="code-preview">
+                                <pre><code class="language-java">
+// Secure Banking Microservice
+@RestController
+@RequestMapping("/api/transactions")
+public class TransactionController {
+    
+    @Autowired
+    private TransactionService transactionService;
+    
+    @PostMapping("/transfer")
+    @Secured("ROLE_USER")
+    public ResponseEntity<TransactionResult> transferFunds(
+            @Valid @RequestBody TransferRequest request) {
+        
+        TransactionResult result = transactionService
+            .processTransfer(request);
+            
+        return ResponseEntity.ok(result);
+    }
+    
+    @GetMapping("/history/{accountId}")
+    @Secured("ROLE_USER")
+    public Page<Transaction> getHistory(
+            @PathVariable String accountId,
+            @RequestParam(defaultValue = "0") int page) {
+        return transactionService.getHistory(accountId, page);
+    }
+}
+                                </code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="javascript-tab">
+                        <div class="language-content">
+                            <div class="language-info">
+                                <div class="language-icon"><i class="fab fa-js"></i></div>
+                                <div class="language-stats">
+                                    <div class="stat">
+                                        <span class="stat-value">50+</span>
+                                        <span class="stat-label">Projects</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-value">Mastery</span>
+                                        <span class="stat-label">Level</span>
+                                    </div>
+                                </div>
+                                <div class="language-badges">
+                                    <span class="badge">React</span>
+                                    <span class="badge">Node.js</span>
+                                    <span class="badge">Vue</span>
+                                    <span class="badge">WebGL</span>
+                                </div>
+                            </div>
+                            <div class="code-preview">
+                                <pre><code class="language-javascript">
+// Advanced React Component with Hooks
+import React, { useState, useEffect, useCallback } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { motion, AnimatePresence } from 'framer-motion';
+
+const DashboardWidget = ({ widgetId, config }) => {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const theme = useSelector(state => state.theme);
+  const dispatch = useDispatch();
+  
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    try {
+      const response = await api.fetchWidgetData(widgetId);
+      setData(response.data);
+    } catch (error) {
+      dispatch(showNotification('Error loading widget data'));
+    } finally {
+      setLoading(false);
+    }
+  }, [widgetId, dispatch]);
+
+  useEffect(() => {
+    fetchData();
+    const interval = setInterval(fetchData, config.refreshRate);
+    return () => clearInterval(interval);
+  }, [fetchData, config.refreshRate]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0 }}
+      className={`widget ${theme.dark ? 'dark' : 'light'}`}
+    >
+      {loading ? <Spinner /> : <WidgetContent data={data} />}
+    </motion.div>
+  );
+};
+                                </code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="dart-tab">
+                        <div class="language-content">
+                            <div class="language-info">
+                                <div class="language-icon"><i class="fas fa-mobile-alt"></i></div>
+                                <div class="language-stats">
+                                    <div class="stat">
+                                        <span class="stat-value">15</span>
+                                        <span class="stat-label">Projects</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-value">Mastery</span>
+                                        <span class="stat-label">Level</span>
+                                    </div>
+                                </div>
+                                <div class="language-badges">
+                                    <span class="badge">Flutter</span>
+                                    <span class="badge">Cross-Platform</span>
+                                    <span class="badge">UI/UX</span>
+                                    <span class="badge">Mobile</span>
+                                </div>
+                            </div>
+                            <div class="code-preview">
+                                <pre><code class="language-dart">
+// Flutter Crypto Wallet UI
+class CryptoWalletHome extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => WalletBloc(
+        repository: context.read<CryptoRepository>(),
+      )..add(LoadWalletEvent()),
+      child: Scaffold(
+        body: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              expandedHeight: 200,
+              floating: true,
+              pinned: true,
+              flexibleSpace: FlexibleSpaceBar(
+                title: Text('Crypto Portfolio'),
+                background: ShaderMask(
+                  shaderCallback: (rect) {
+                    return LinearGradient(
+                      colors: [Colors.transparent, Colors.black],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ).createShader(rect);
+                  },
+                  blendMode: BlendMode.darken,
+                  child: Image.asset(
+                    'assets/images/crypto_bg.jpg',
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: PortfolioSummaryCard(),
+            ),
+            SliverList(
+              delegate: SliverChildListDelegate([
+                AssetListSection(),
+                RecentTransactionsSection(),
+                MarketTrendsSection(),
+              ]),
+            ),
+          ],
+        ),
+        floatingActionButton: AddAssetButton(),
+      ),
+    );
+  }
+}
+                                </code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="sql-tab">
+                        <div class="language-content">
+                            <div class="language-info">
+                                <div class="language-icon"><i class="fas fa-database"></i></div>
+                                <div class="language-stats">
+                                    <div class="stat">
+                                        <span class="stat-value">30+</span>
+                                        <span class="stat-label">Projects</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-value">Mastery</span>
+                                        <span class="stat-label">Level</span>
+                                    </div>
+                                </div>
+                                <div class="language-badges">
+                                    <span class="badge">PostgreSQL</span>
+                                    <span class="badge">MySQL</span>
+                                    <span class="badge">MongoDB</span>
+                                    <span class="badge">Redis</span>
+                                </div>
+                            </div>
+                            <div class="code-preview">
+                                <pre><code class="language-sql">
+-- Advanced Analytics Query for E-commerce
+WITH customer_segments AS (
+  SELECT 
+    customer_id,
+    CASE 
+      WHEN total_spent > 10000 THEN 'Premium'
+      WHEN total_spent > 5000 THEN 'Gold'
+      WHEN total_spent > 1000 THEN 'Silver'
+      ELSE 'Bronze'
+    END AS segment,
+    total_spent,
+    COUNT(DISTINCT order_id) AS order_count,
+    MAX(order_date) AS last_order_date
+  FROM (
+    SELECT 
+      c.customer_id,
+      o.order_id,
+      o.order_date,
+      SUM(oi.price * oi.quantity) AS total_spent
+    FROM customers c
+    JOIN orders o ON c.customer_id = o.customer_id
+    JOIN order_items oi ON o.order_id = oi.order_id
+    WHERE o.order_date >= CURRENT_DATE - INTERVAL '1 year'
+    GROUP BY c.customer_id, o.order_id, o.order_date
+  ) AS customer_orders
+  GROUP BY customer_id, total_spent
+)
+SELECT 
+  cs.customer_id,
+  c.first_name,
+  c.last_name,
+  c.email,
+  cs.segment,
+  cs.total_spent,
+  cs.order_count,
+  cs.last_order_date
+FROM customer_segments cs
+JOIN customers c ON cs.customer_id = c.customer_id
+WHERE cs.segment IN ('Premium', 'Gold')
+ORDER BY cs.total_spent DESC;
+                                </code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="skills-matrix">
+                <h3>Skills Matrix</h3>
+                <div class="matrix-container">
+                    <div class="matrix-category">
+                        <h4>Frontend</h4>
+                        <div class="skill-bar" data-skill="HTML/CSS" data-level="95">
+                            <div class="skill-progress"></div>
+                            <span class="skill-name">HTML/CSS</span>
+                            <span class="skill-percent">95%</span>
+                        </div>
+                        <div class="skill-bar" data-skill="JavaScript" data-level="98">
+                            <div class="skill-progress"></div>
+                            <span class="skill-name">JavaScript</span>
+                            <span class="skill-percent">98%</span>
+                        </div>
+                        <div class="skill-bar" data-skill="React" data-level="90">
+                            <div class="skill-progress"></div>
+                            <span class="skill-name">React</span>
+                            <span class="skill-percent">90%</span>
+                        </div>
+                        <div class="skill-bar" data-skill="Vue" data-level="85">
+                            <div class="skill-progress"></div>
+                            <span class="skill-name">Vue</span>
+                            <span class="skill-percent">85%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="matrix-category">
+                        <h4>Backend</h4>
+                        <div class="skill-bar" data-skill="Node.js" data-level="92">
+                            <div class="skill-progress"></div>
+                            <span class="skill-name">Node.js</span>
+                            <span class="skill-percent">92%</span>
+                        </div>
+                        <div class="skill-bar" data-skill="Python" data-level="96">
+                            <div class="skill-progress"></div>
+                            <span class="skill-name">Python</span>
+                            <span class="skill-percent">96%</span>
+                        </div>
+                        <div class="skill-bar" data-skill="Java" data-level="88">
+                            <div class="skill-progress"></div>
+                            <span class="skill-name">Java</span>
+                            <span class="skill-percent">88%</span>
+                        </div>
+                        <div class="skill-bar" data-skill="Go" data-level="80">
+                            <div class="skill-progress"></div>
+                            <span class="skill-name">Go</span>
+                            <span class="skill-percent">80%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="matrix-category">
+                        <h4>Database</h4>
+                        <div class="skill-bar" data-skill="SQL" data-level="95">
+                            <div class="skill-progress"></div>
+                            <span class="skill-name">SQL</span>
+                            <span class="skill-percent">95%</span>
+                        </div>
+                        <div class="skill-bar" data-skill="MongoDB" data-level="63">
+                            <div class="skill-progress"></div>
+                            <span class="skill-name">MongoDB</span>
+                            <span class="skill-percent">63%</span>
+                        </div>
+                        <div class="skill-bar" data-skill="Redis" data-level="55">
+                            <div class="skill-progress"></div>
+                            <span class="skill-name">Redis</span>
+                            <span class="skill-percent">55%</span>
+                        </div>
+                        <div class="skill-bar" data-skill="GraphQL" data-level="78">
+                            <div class="skill-progress"></div>
+                            <span class="skill-name">GraphQL</span>
+                            <span class="skill-percent">78%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact & Community -->
+        <section id="contact" class="section">
+            <div class="section-header">
+                <h2 data-text="Contact & Community">Contact & Community</h2>
+                <div class="section-line"></div>
+            </div>
+            <div class="contact-container">
+                <div class="contact-form-container">
+                    <form class="contact-form">
+                        <div class="form-group">
+                            <input type="text" id="name" placeholder="Your Name" required>
+                            <label for="name">Name</label>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" id="email" placeholder="Your Email" required>
+                            <label for="email">Email</label>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="subject" placeholder="Subject" required>
+                            <label for="subject">Subject</label>
+                        </div>
+                        <div class="form-group">
+                            <textarea id="message" placeholder="Your Message" required></textarea>
+                            <label for="message">Message</label>
+                        </div>
+                        <button type="submit" class="submit-btn">Send Message</button>
+                    </form>
+                </div>
+                <div class="community-container">
+                    <div class="community-card">
+                        <div class="community-icon"><i class="fab fa-discord"></i></div>
+                        <h3>Join the Discord Lab</h3>
+                        <p>Connect with like-minded tech enthusiasts, share knowledge, and collaborate on projects.</p>
+                        <a href="#" class="community-btn">Join Community</a>
+                    </div>
+                    <div class="community-card">
+                        <div class="community-icon"><i class="fab fa-telegram"></i></div>
+                        <h3>Telegram Channel</h3>
+                        <p>Get instant updates, tutorials, and connect with Jay Rout directly.</p>
+                        <a href="https://t.me/noxlooters_0073" class="community-btn">@noxlooters_0073</a>
+                    </div>
+                </div>
+            </div>
+            <div class="contact-social">
+                <div class="contact-social-item">
+                    <div class="social-icon"><i class="fas fa-envelope"></i></div>
+                    <h3>Email</h3>
+                    <a href="mailto:jayhackerrout@gmail.com">jayhackerrout@gmail.com</a>
+                </div>
+                <div class="contact-social-item">
+                    <div class="social-icon"><i class="fab fa-instagram"></i></div>
+                    <h3>Instagram</h3>
+                    <a href="https://instagram.com/jayhacker_0073" target="_blank">@jayhacker_0073</a>
+                </div>
+                <div class="contact-social-item">
+                    <div class="social-icon"><i class="fab fa-telegram"></i></div>
+                    <h3>Telegram</h3>
+                    <a href="https://t.me/noxlooters_0073" target="_blank">@noxlooters_0073</a>
+                </div>
+            </div>
+            <div class="testimonials">
+                <h3>What People Say</h3>
+                <div class="testimonial-slider">
+                    <div class="testimonial-slide">
+                        <div class="testimonial-content">
+                            <p>"Jay's programming expertise helped our startup develop a cutting-edge AI solution that transformed our business."</p>
+                            <div class="testimonial-author">
+                                <div class="author-image"></div>
+                                <div class="author-info">
+                                    <h4>Alex Johnson</h4>
+                                    <span>Tech Startup CEO</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-slide">
+                        <div class="testimonial-content">
+                            <p>"The cybersecurity training from Jay was comprehensive and practical. I learned more in his course than in my entire college program."</p>
+                            <div class="testimonial-author">
+                                <div class="author-image"></div>
+                                <div class="author-info">
+                                    <h4>Sarah Miller</h4>
+                                    <span>Security Analyst</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-slide">
+                        <div class="testimonial-content">
+                            <p>"Jay's video editing templates saved me countless hours and elevated the quality of my content to professional standards."</p>
+                            <div class="testimonial-author">
+                                <div class="author-image"></div>
+                                <div class="author-info">
+                                    <h4>Michael Chen</h4>
+                                    <span>Content Creator</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-dots">
+                    <span class="dot active"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI Chatbot -->
+        <div class="chatbot-container">
+            <div class="chatbot-toggle">
+                <i class="fas fa-robot"></i>
+            </div>
+            <div class="chatbot-window">
+                <div class="chatbot-header">
+                    <h3>AI Assistant</h3>
+                    <div class="chatbot-close"><i class="fas fa-times"></i></div>
+                </div>
+                <div class="chatbot-messages">
+                    <div class="message bot">
+                        <div class="message-content">Hello! I'm Jay's AI assistant. How can I help you today?</div>
+                    </div>
+                </div>
+                <div class="chatbot-input">
+                    <input type="text" placeholder="Type your message...">
+                    <button class="send-btn"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">JAYROUT.X</div>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="https://github.com/jayrout" target="_blank">GitHub</a>
+                <a href="#">Report Bug</a>
+            </div>
+            <div class="footer-social">
+                <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-linkedin"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-github"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+            </div>
+            <div class="footer-copyright">
+                Made with <span class="heart">💻</span> by Jay Rout | All Rights Reserved &copy; <span id="current-year"></span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <style>
+        .terminal-btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #0f0, #0a0);
+            color: #000;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+            transition: all 0.3s ease;
+        }
+        
+        .terminal-btn:hover {
+            background: linear-gradient(135deg, #0a0, #0f0);
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.8);
+            transform: translateY(-2px);
+        }
+        
+        .terminal-btn i {
+            margin-right: 8px;
+        }
+    </style>
+</body>
+</html>

@@ -1,0 +1,8 @@
+{
+  "name": "insta-portfolio-netlify",
+  "version": "1.0.0",
+  "description": "Portfolio website with a Gemini-powered chatbot, ready for Netlify.",
+  "dependencies": {
+    "node-fetch": "^3.3.2"
+  }
+}
